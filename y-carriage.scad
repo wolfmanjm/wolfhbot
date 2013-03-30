@@ -1,6 +1,6 @@
 use <misumi-parts-library.scad>
 use <w-wheel.scad>
-use <../myLibs.scad>
+use <myLibs.scad>
 
 // display it for print
 //Ycarriage();
