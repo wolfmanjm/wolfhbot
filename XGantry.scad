@@ -19,13 +19,13 @@ echo("xgantry length= ", xgantry_length);
 
 %translate([0,0,-height-extrusion/2]) top();
 
-Xgantry();
+Xgantry(0);
 
-module Xgantry() {
+module Xgantry(xpos= 0) {
 	translate([xgantry_length/2,0,carriage_ht]) rotate([0,0,90]) hfs2020(xgantry_length);
 	translate([sep1,0,0]) rotate([0,0,90]) Ycarriage_with_wheels();
 	translate([-sep1,0,0]) rotate([0,0,-90]) Ycarriage_with_wheels();
-	translate([0,0,carriage_ht+10]) rotate([0,0,0]) Ycarriage_with_wheels();
+	translate([xpos,0,carriage_ht+10]) rotate([0,0,0]) Ycarriage_with_wheels();
 }
 
 

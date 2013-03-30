@@ -52,7 +52,7 @@ module YcarriageModel() {
 	// show 2020 beam we are riding on
 	%translate([200/2, wheel_separation/2, wheel_z]) rotate([0, 0, 90]) hfs2020(200);
 
-	//translate([0, -20, -200]) rotate([90,0,90]) hfs2040(200);
+	%translate([0, -20, -thickness]) rotate([90,0,90]) hfs2020(50);
 }
 
 module Ycarriage_with_wheels() {
@@ -88,12 +88,22 @@ module base() {
 	}
 }
 
+// bracket for 2020 extrusion connection
+module flange(width) {
+	difference() {
+		cube([5,20,width]);
+		#translate([5/2-5/2, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.2);
+	}
+}
+
 module Ycarriage() {
 	union() {
 		base();
 		translate([-wheel_distance/2,0,0]) wheel_pillar();
 		translate([wheel_distance/2,0,0]) wheel_pillar();
 		translate([0,wheel_separation,0]) wheel_pillar();
+		translate([10.2,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+		translate([-10.2-5,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
 	}
 }
 
