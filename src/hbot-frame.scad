@@ -1,5 +1,6 @@
 use <misumi-parts-library.scad>;
 use <bed.scad>;
+use <XGantry.scad>
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -67,3 +68,5 @@ translate([-bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 
 translate([0,0, 180]) bed_assembly();
 scale([4,4,4]) rotate([90,0,0]) import("jack2.stl");
+
+translate([0,0,height+extrusion/2]) Xgantry();
