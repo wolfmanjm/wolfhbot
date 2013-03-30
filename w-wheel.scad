@@ -5,10 +5,10 @@ t= (od-id);
 thick= 11.7;
 t2= thick-t;
 
-wheel_id= 22; // the diameter of the outside hole
-wheel_d= 2; // the depth from the outside of the wheel to the bearing
-wheel_groove_d= 2; // the depth of the groove on the outside of the wheel
-wheel_groove_w= 2; // the width of the groove on the outside of the wheel
+wheel_id= 22.0; // the diameter of the outside hole
+wheel_d= 2.47; // the depth from the outside of the wheel to the bearing
+wheel_groove_d= 2.5; // the depth of the groove on the outside of the wheel
+wheel_groove_w= 3; // the width of the groove on the outside of the wheel
 
 bearingThickness= 7;
 bearingOD= 22;
@@ -17,6 +17,7 @@ bearingID= 8;
 function w_wheel_dia()= od;
 function w_wheel_width()= thick;
 function w_wheel_id()= wheel_id;
+function w_wheel_indent()= wheel_d-0.1;
 
 module W_wheel() {
 	cylinder(r1=od/2,r2=id/2, h=t/2);
