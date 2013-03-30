@@ -1,6 +1,5 @@
 use <misumi-parts-library.scad>
 use <w-wheel.scad>
-use <../myLibs.scad>
 
 // the dimensions of the extrusion to run on
 extrusion_width= 20; // the side that the wheels run on
@@ -37,35 +36,6 @@ wheel_z= pillarht+wheel_width/2;
 
 function get_wheel_z()= wheel_z;
 
-module oldXcarriage() {
-translate([0, 0, thickness/2])
-	difference() {
-	  union() {
-	    for (x = [-wheelx, wheelx]) {
-	      for (y = [-wheely, wheely]) {
-	        translate([x, y, 0]) {
-				#cylinder(r=8, h=thickness, center=true);
-				translate([0,0,thickness/2]) standoff();
-	 			//%translate([0, 0, thickness/2 + bearingThickness/2+standoffht]) w_wheel();
-	        }
-	      }
-	    }
-	    for (a = [-extrusion_width, extrusion_width]) rotate([0, 0, a]) difference() {
-	      cube([8, d*2, thickness], center=true);
-	      translate([0, 0, 50]) rotate([0, 90, 0])
-	        cylinder(r=50, h=8.1, center=true, $fn=120);
-	    }
-	  }
-	  for (x = [-wheelx, wheelx]) {
-	    for (y = [-wheely, wheely]) {
-	      translate([x, y, -thickness/2]) {
-	        hole(8, thickness+5);
-	      }
-	    }
-	  }
-	}
-}
-
 // used to clean the base around the pillar using an intersection
 module wheel_pillar_cutout(h=thickness) {
 	translate([0,0,-thickness/2]) union() {
@@ -93,6 +63,7 @@ module base() {
 		}
 		translate([wheel_separation/2+6,wheel_distance/2+2,-thickness-0.1]) cylinder(r=50/2, h= thickness+0.2);
 		translate([-wheel_separation/2-6,wheel_distance/2+2,-thickness-0.1]) cylinder(r=50/2, h= thickness+0.2);
+		translate([0,-8,-thickness-0.1]) cylinder(r=40/2, h= thickness+0.2);
 	}
 }
 
