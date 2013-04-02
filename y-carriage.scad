@@ -3,10 +3,10 @@ use <w-wheel.scad>
 use <myLibs.scad>
 
 // display it for print
-//Ycarriage();
+Ycarriage();
 
 // render it for model
-YcarriageModel();
+//YcarriageModel();
 
 //carriage_with_wheels();
 
@@ -41,6 +41,7 @@ echo("wheel distance= ", wheel_distance);
 wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
+wheelpos= [ [-wheel_distance/2, 0], [wheel_distance/2, 0], [0, wheel_separation] ];
 module YcarriageModel() {
 	Ycarriage();
 	
@@ -60,9 +61,8 @@ module Ycarriage_with_wheels() {
 		Ycarriage();
 	
 		// show W Wheels
-		translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
-		translate([wheel_distance/2, 0, wheel_z]) w_wheel();
-		translate([0, wheel_separation, wheel_z]) w_wheel();
+		for(p=wheelpos)
+			translate([p[0], p[1], wheel_z]) w_wheel();
 	}
 }
 
@@ -97,13 +97,18 @@ module flange(width) {
 }
 
 module Ycarriage() {
-	union() {
-		base();
-		translate([-wheel_distance/2,0,0]) wheel_pillar();
-		translate([wheel_distance/2,0,0]) wheel_pillar();
-		translate([0,wheel_separation,0]) wheel_pillar();
-		translate([10.2,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
-		translate([-10.2-5,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+	difference() {
+	   union() {
+			base();
+			translate([-wheel_distance/2,0,0]) wheel_pillar();
+			translate([wheel_distance/2,0,0]) wheel_pillar();
+			translate([0,wheel_separation,0]) wheel_pillar();
+			translate([10.2,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+			translate([-10.2-5,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+		}
+		// M3 holes for wheels
+		for(p=wheelpos)
+			translate([p[0], p[1], -50/2]) hole(3,50);
 	}
 }
 
