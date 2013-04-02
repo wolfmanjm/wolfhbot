@@ -8,7 +8,7 @@ The plans are use 2020 Misumi extrusions for most of the frame.
 * The XY carriages will run on the extrusions on Steve Grabers Universal W Wheels.
 * The drive will use #25 Roller chain.
 * The Z bed lifting mechanism will be a scissor Jack arrangement.
-
+* build volume is around 400x400x300 mm
 
 License
 -------
