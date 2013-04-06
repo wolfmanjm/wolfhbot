@@ -3,7 +3,7 @@ use <w-wheel.scad>
 use <myLibs.scad>
 
 // display it for print
-Ycarriage();
+Ycarriage(1);
 
 // render it for model
 //YcarriageModel();
@@ -31,7 +31,7 @@ wheel_penetration=1; // the amount the w wheel fits in the slot
 wheel_clearance= 2; // clearance between the side of the extrusion and the carriage
 pillarht= extrusion_height/2-wheel_width/2+wheel_clearance;
 pillardia= 19;
-clearance= -1.2; // increase for more clearance, decrease for tighter fit
+clearance= 0; // increase for more clearance, decrease for tighter fit
 wheel_separation= extrusion_width+wheel_diameter+clearance-wheel_penetration*2; // separation of two wheels and bottom wheel for given extrusion
 
 // calculate separation of top two wheels to make an equilateral triangle
@@ -42,8 +42,9 @@ wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
 wheelpos= [ [-wheel_distance/2, 0], [wheel_distance/2, 0], [0, wheel_separation] ];
+
 module YcarriageModel() {
-	Ycarriage();
+	Ycarriage(0);
 	
 	// show W Wheels
 	%translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
@@ -58,7 +59,7 @@ module YcarriageModel() {
 
 module Ycarriage_with_wheels() {
 	rotate([-90,0,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
-		Ycarriage();
+		Ycarriage(0);
 	
 		// show W Wheels
 		for(p=wheelpos)
@@ -76,7 +77,7 @@ module wheel_pillar(){
 }
 
 module base() {
-	co= 35;
+	co= 33;
 	r= pillardia/2;
 	difference() {
 		translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
@@ -96,19 +97,31 @@ module flange(width) {
 	}
 }
 
-module Ycarriage() {
+module Ycarriage(print=1) {
 	difference() {
 	   union() {
 			base();
-			translate([-wheel_distance/2,0,0]) wheel_pillar();
-			translate([wheel_distance/2,0,0]) wheel_pillar();
-			translate([0,wheel_separation,0]) wheel_pillar();
+			translate([wheelpos[0][0], wheelpos[0][1],0]) wheel_pillar();
+			translate([wheelpos[1][0], wheelpos[1][1],0]) wheel_pillar();
+			if(print == 1) {
+				// print this one separatley so it can be adjustable
+				translate([wheelpos[2][0], wheelpos[2][1]+pillardia+5,-thickness]) wheel_pillar();
+			}else{
+				translate([wheelpos[2][0],wheelpos[2][1],0]) wheel_pillar();
+			}
 			translate([10.05,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
 			translate([-10.05-5,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
 		}
 		// M3 holes for wheels
-		for(p=wheelpos)
-			translate([p[0], p[1], -50/2]) hole(3,50);
+		translate([wheelpos[0][0], wheelpos[0][1], -50/2]) hole(3,50);
+		translate([wheelpos[1][0], wheelpos[1][1], -50/2]) hole(3,50);
+		if(print == 1) {
+			translate([wheelpos[2][0], wheel_separation+pillardia+5, -50/2]) hole(3,50);
+			// slot for adjustable wheel
+		   translate([wheelpos[2][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,9,50);
+		}else{
+			translate([wheelpos[2][0], wheelpos[2][1], -50/2]) hole(3,50);
+		}
 	}
 }
 

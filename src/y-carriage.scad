@@ -1,12 +1,12 @@
 use <misumi-parts-library.scad>
 use <w-wheel.scad>
-use <../myLibs.scad>
+use <myLibs.scad>
 
 // display it for print
-//Ycarriage();
+Ycarriage(1);
 
 // render it for model
-YcarriageModel();
+//YcarriageModel();
 
 //carriage_with_wheels();
 
@@ -41,8 +41,10 @@ echo("wheel distance= ", wheel_distance);
 wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
+wheelpos= [ [-wheel_distance/2, 0], [wheel_distance/2, 0], [0, wheel_separation] ];
+
 module YcarriageModel() {
-	Ycarriage();
+	Ycarriage(0);
 	
 	// show W Wheels
 	%translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
@@ -57,12 +59,11 @@ module YcarriageModel() {
 
 module Ycarriage_with_wheels() {
 	rotate([-90,0,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
-		Ycarriage();
+		Ycarriage(0);
 	
 		// show W Wheels
-		translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
-		translate([wheel_distance/2, 0, wheel_z]) w_wheel();
-		translate([0, wheel_separation, wheel_z]) w_wheel();
+		for(p=wheelpos)
+			translate([p[0], p[1], wheel_z]) w_wheel();
 	}
 }
 
@@ -70,21 +71,21 @@ module wheel_pillar(){
 	ht= pillarht;
 	translate([0,0,ht/2]) union() {
 		cylinder(r1=pillardia/2, r2=16/2, h=ht, center=true);
-		translate([0,0,ht/2]) cylinder(r=bearingID/2, h=bearingThickness+wheel_indent, $fn=64);
-		translate([0,0,ht/2]) cylinder(r1=16/2, r2= bearingShaftCollar/2, h=wheel_indent);
+		translate([0,0,ht/2-0.05]) cylinder(r=bearingID/2, h=bearingThickness+wheel_indent, $fn=64);
+		translate([0,0,ht/2-0.05]) cylinder(r1=16/2, r2= bearingShaftCollar/2, h=wheel_indent);
 	}
 }
 
 module base() {
-	co= 35;
+	co= 33;
 	r= pillardia/2;
 	difference() {
-		translate([0,0,-thickness]) linear_extrude(height= thickness) hull() {
+		translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
 			translate([-wheel_distance/2,0,0]) circle(r= r);
 			translate([wheel_distance/2,0,0]) circle(r= r);
 			translate([0,wheel_separation,0]) circle(r= r);
 		}
-		translate([0,co/2+4,-thickness-0.1]) cylinder(r=co/2, h= thickness+0.2);
+		translate([0,co/2+3,-thickness-0.1]) cylinder(r=co/2, h= thickness+0.2);
 	}
 }
 
@@ -92,18 +93,35 @@ module base() {
 module flange(width) {
 	difference() {
 		cube([5,20,width]);
-		#translate([5/2-5/2, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.2);
+		#translate([5/2-5/2-0.25, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.5);
 	}
 }
 
-module Ycarriage() {
-	union() {
-		base();
-		translate([-wheel_distance/2,0,0]) wheel_pillar();
-		translate([wheel_distance/2,0,0]) wheel_pillar();
-		translate([0,wheel_separation,0]) wheel_pillar();
-		translate([10.2,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
-		translate([-10.2-5,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+module Ycarriage(print=1) {
+	difference() {
+	   union() {
+			base();
+			translate([wheelpos[0][0], wheelpos[0][1],0]) wheel_pillar();
+			translate([wheelpos[1][0], wheelpos[1][1],0]) wheel_pillar();
+			if(print == 1) {
+				// print this one separatley so it can be adjustable
+				translate([wheelpos[2][0], wheelpos[2][1]+pillardia+5,-thickness]) wheel_pillar();
+			}else{
+				translate([wheelpos[2][0],wheelpos[2][1],0]) wheel_pillar();
+			}
+			translate([10.05,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
+			translate([-10.05-5,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
+		}
+		// M3 holes for wheels
+		translate([wheelpos[0][0], wheelpos[0][1], -50/2]) hole(3,50);
+		translate([wheelpos[1][0], wheelpos[1][1], -50/2]) hole(3,50);
+		if(print == 1) {
+			translate([wheelpos[2][0], wheel_separation+pillardia+5, -50/2]) hole(3,50);
+			// slot for adjustable wheel
+		   translate([wheelpos[2][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,9,50);
+		}else{
+			translate([wheelpos[2][0], wheelpos[2][1], -50/2]) hole(3,50);
+		}
 	}
 }
 
