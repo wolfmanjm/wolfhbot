@@ -31,7 +31,7 @@ wheel_penetration=1; // the amount the w wheel fits in the slot
 wheel_clearance= 2; // clearance between the side of the extrusion and the carriage
 pillarht= extrusion_height/2-wheel_width/2+wheel_clearance;
 pillardia= 19;
-clearance= 0; // increase for more clearance, decrease for tighter fit
+clearance= -1.2; // increase for more clearance, decrease for tighter fit
 wheel_separation= extrusion_width+wheel_diameter+clearance-wheel_penetration*2; // separation of two wheels and bottom wheel for given extrusion
 
 // calculate separation of top two wheels to make an equilateral triangle
@@ -70,8 +70,8 @@ module wheel_pillar(){
 	ht= pillarht;
 	translate([0,0,ht/2]) union() {
 		cylinder(r1=pillardia/2, r2=16/2, h=ht, center=true);
-		translate([0,0,ht/2]) cylinder(r=bearingID/2, h=bearingThickness+wheel_indent, $fn=64);
-		translate([0,0,ht/2]) cylinder(r1=16/2, r2= bearingShaftCollar/2, h=wheel_indent);
+		translate([0,0,ht/2-0.05]) cylinder(r=bearingID/2, h=bearingThickness+wheel_indent, $fn=64);
+		translate([0,0,ht/2-0.05]) cylinder(r1=16/2, r2= bearingShaftCollar/2, h=wheel_indent);
 	}
 }
 
@@ -79,12 +79,12 @@ module base() {
 	co= 35;
 	r= pillardia/2;
 	difference() {
-		translate([0,0,-thickness]) linear_extrude(height= thickness) hull() {
+		translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
 			translate([-wheel_distance/2,0,0]) circle(r= r);
 			translate([wheel_distance/2,0,0]) circle(r= r);
 			translate([0,wheel_separation,0]) circle(r= r);
 		}
-		translate([0,co/2+4,-thickness-0.1]) cylinder(r=co/2, h= thickness+0.2);
+		translate([0,co/2+3,-thickness-0.1]) cylinder(r=co/2, h= thickness+0.2);
 	}
 }
 
@@ -92,7 +92,7 @@ module base() {
 module flange(width) {
 	difference() {
 		cube([5,20,width]);
-		#translate([5/2-5/2, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.2);
+		#translate([5/2-5/2-0.25, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.5);
 	}
 }
 
@@ -103,8 +103,8 @@ module Ycarriage() {
 			translate([-wheel_distance/2,0,0]) wheel_pillar();
 			translate([wheel_distance/2,0,0]) wheel_pillar();
 			translate([0,wheel_separation,0]) wheel_pillar();
-			translate([10.2,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
-			translate([-10.2-5,-pillardia/2-20,-(15/2+thickness/4)]) flange(15);
+			translate([10.05,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
+			translate([-10.05-5,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
 		}
 		// M3 holes for wheels
 		for(p=wheelpos)
