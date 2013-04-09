@@ -3,12 +3,12 @@ use <w-wheel.scad>
 use <myLibs.scad>
 
 // display it for print
-Ycarriage(1);
+//Ycarriage(1);
 
 // render it for model
 //YcarriageModel();
 
-//carriage_with_wheels();
+Ycarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion_width= 20; // the side that the wheels run on
@@ -58,7 +58,7 @@ module YcarriageModel() {
 }
 
 module Ycarriage_with_wheels() {
-	rotate([-90,0,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
+	rotate([0,180,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
 		Ycarriage(0);
 	
 		// show W Wheels
@@ -91,10 +91,10 @@ module base() {
 
 // bracket for 2020 extrusion connection
 module flange(width) {
-	difference() {
-		cube([5,20,width]);
-		#translate([5/2-5/2-0.25, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.5);
-	}
+//	difference() {
+//		cube([5,20,width]);
+//		translate([5/2-5/2-0.25, 20/2,width/2]) rotate([0,90,0]) hole(5, 5+0.5);
+//	}
 }
 
 module Ycarriage(print=1) {
@@ -122,6 +122,12 @@ module Ycarriage(print=1) {
 		}else{
 			translate([wheelpos[2][0], wheelpos[2][1], -50/2]) hole(3,50);
 		}
+
+		// grub screw at bottom for adjusting tightness of bottom wheel
+		translate([0,wheelpos[2][1]+pillardia/2+2,-thickness/2]) rotate([90,0,0]) hole(3,pillardia/2);
+		translate([0,wheelpos[2][1]+9/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
+		#translate([0,wheelpos[2][1]+9/2-3/2,0]) cube([5.46,3,thickness], center=true);
+		
 	}
 }
 
