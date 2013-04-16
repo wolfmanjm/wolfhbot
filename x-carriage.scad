@@ -1,17 +1,21 @@
 use <misumi-parts-library.scad>
 use <w-wheel.scad>
 use <myLibs.scad>
+use <XGantry.scad>
+
+//extruder_mount();
 
 // display it for print
-Ycarriage(1);
+//Xcarriage(1);
 
 // render it for model
-//YcarriageModel();
+//XcarriageModel();
 
-//Ycarriage_with_wheels();
+Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
-extrusion_width= 20; // the side that the wheels run on
+extrusion= 20;
+extrusion_width= get_xgantry_width()+extrusion; // the side that the wheels run on
 extrusion_height= 20;
 
 // the thickness of the base
@@ -35,7 +39,8 @@ clearance= 0; // increase for more clearance, decrease for tighter fit
 wheel_separation= extrusion_width+wheel_diameter+clearance-wheel_penetration*2; // separation of two wheels and bottom wheel for given extrusion
 
 // calculate separation of top two wheels to make an equilateral triangle
-wheel_distance= (wheel_separation/tan(60))*2; // distance from wheel center to center of top two wheels
+//wheel_distance= (wheel_separation/tan(60))*2; // distance from wheel center to center of top two wheels
+wheel_distance= 100;
 echo("wheel distance= ", wheel_distance);
 
 wheel_z= pillarht+wheel_width/2;
@@ -44,27 +49,31 @@ function get_wheel_z()= wheel_z;
 wheelpos= [ [-wheel_distance/2, 0], [wheel_distance/2, 0], [0, wheel_separation] ];
 function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
 
-module YcarriageModel() {
-	Ycarriage(0);
+module XcarriageModel() {
+	Xcarriage(0);
 	
 	// show W Wheels
 	%translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
 	%translate([wheel_distance/2, 0, wheel_z]) w_wheel();
 	%translate([0, wheel_separation, wheel_z]) w_wheel();
 	
-	// show 2020 beam we are riding on
-	%translate([200/2, wheel_separation/2, wheel_z]) rotate([0, 0, 90]) hfs2020(200);
+	// show what we are riding on
+	%translate([0, wheel_separation/2, -10]) rotate([0, 0, 0]) Xgantry();
 
-	%translate([0, -20, -thickness]) rotate([90,0,90]) hfs2020(50);
+	// show extruder and hotend
+	translate([0,wheel_separation/2,-thickness-5]) rotate([0,180,0]) extruder();
 }
 
-module Ycarriage_with_wheels() {
+module Xcarriage_with_wheels() {
 	rotate([0,180,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
-		Ycarriage(0);
+		Xcarriage(0);
 	
 		// show W Wheels
 		for(p=wheelpos)
 			translate([p[0], p[1], wheel_z]) w_wheel();
+	
+		// show extruder and hotend
+		translate([0,wheel_separation/2,-thickness-5]) rotate([0,180,0]) extruder();
 	}
 }
 
@@ -78,15 +87,12 @@ module wheel_pillar(){
 }
 
 module base() {
-	co= 33;
+	co= 50;
 	r= pillardia/2;
-	difference() {
-		translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
-			translate([-wheel_distance/2,0,0]) circle(r= r);
-			translate([wheel_distance/2,0,0]) circle(r= r);
-			translate([0,wheel_separation,0]) circle(r= r);
-		}
-		translate([0,co/2+3,-thickness-0.1]) cylinder(r=co/2, h= thickness+0.2);
+	translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
+		translate([-wheel_distance/2,0,0]) circle(r= r);
+		translate([wheel_distance/2,0,0]) circle(r= r);
+		translate([0,wheel_separation,0]) circle(r= r);
 	}
 }
 
@@ -98,7 +104,7 @@ module flange(width) {
 //	}
 }
 
-module Ycarriage(print=1) {
+module Xcarriage(print=1) {
 	difference() {
 	   union() {
 			base();
@@ -112,7 +118,12 @@ module Ycarriage(print=1) {
 			}
 			translate([10.05,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
 			translate([-10.05-5,-pillardia/2-20+0.1,-(15/2+thickness/4)]) flange(15);
+
 		}
+
+		// negative mount for extruder
+		translate([0,wheel_separation/2,-thickness/2]) rotate([0,0,90]) extruder_mount();
+
 		// M3 holes for wheels
 		translate([wheelpos[0][0], wheelpos[0][1], -50/2]) hole(3,50);
 		translate([wheelpos[1][0], wheelpos[1][1], -50/2]) hole(3,50);
@@ -132,3 +143,25 @@ module Ycarriage(print=1) {
 	}
 }
 
+// extruder and head
+module extruder() {
+        translate([-2,-2.7,0]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
+        translate([0,10,0]) rotate([90,0,0,0,0]) import("me_body_v5.2_3mm.stl");
+}
+
+module extruder_mount() {
+	holes = 4;
+	w =  get_xgantry_width() - 20 - 1;
+	l= 60;
+	height = thickness+2;
+	
+	translate([0,0,1]) difference() {
+		cube([w, l, height], center=true);
+		difference() {
+			cube([w, l, height], center=true);
+			cylinder(r=15, h=height+1, center=true, $fn=16);
+		  #for (a = [-25,25]) translate([0, a, -height]) hole(holes, 2*height);
+		  #for (a = [-25,25]) translate([a, 0, -height]) hole(holes, 2*height);
+		}
+	}
+}
