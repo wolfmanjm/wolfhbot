@@ -1,7 +1,9 @@
 use <misumi-parts-library.scad>;
 use <bed.scad>;
 use <XGantry.scad>
-use <motor-mount.scad>
+use <motor-bracket.scad>
+use <x-carriage.scad>
+use <sg-spool.scad>
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -71,6 +73,11 @@ translate([0,0, 180]) bed_assembly();
 //scale([4,4,4]) rotate([90,0,0]) import("jack2.stl");
 
 translate([0,0,height+extrusion/2]) gantry();
+translate([0,-get_xgantry_width()/2-10,height+extrusion/2+30]) Xcarriage_with_wheels();
 
-translate([250+26,250+25,height+30]) rotate([0,180,0]) motorPlate(5, 5);
+mh= height+10;
+translate([-sides/2-extrusion,sides/2+extrusion,mh+20]) rotate([180,0,90]) motor_bracket(0);
+translate([sides/2+extrusion,sides/2+extrusion,mh+20]) rotate([180,0,90]) motor_bracket(1);
 
+translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+20]) spool();
+translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+20]) spool();

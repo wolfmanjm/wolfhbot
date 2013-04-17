@@ -2,6 +2,9 @@ use <misumi-parts-library.scad>;
 
 extrusion= 20; // extrusion 2020
 sides= 500;
+mm= 25.4;
+bedw= 350;
+bedl= 350;
 
 bed_assembly();
 
@@ -16,7 +19,7 @@ module bed_brace() {
 }
 
 module bed() {
-	translate([0,0,extrusion/2 + 3/2]) cube([400, 400, 3], center= true);
+	translate([0,0,extrusion/2 + 3/2]) cube([bedw, bedl, 3], center= true);
 }
 
 module bed_assembly() {
