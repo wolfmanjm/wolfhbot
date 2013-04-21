@@ -10,6 +10,12 @@ The plans are use 2020 Misumi extrusions for most of the frame.
 * The Z bed lifting mechanism will be a scissor Jack arrangement.
 * build volume is around 400x400x300 mm
 
+
+Currently using line driven, and just XY moves...
+
+* [first movements](http://youtu.be/cA50g_V9wbQ)
+* [second movement](http://youtu.be/p5AFRTE33c4)
+
 License
 -------
 GPL3
