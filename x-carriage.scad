@@ -3,20 +3,24 @@ use <w-wheel.scad>
 use <myLibs.scad>
 use <XGantry.scad>
 
+columnfudge= 0.1; //fudge factor to get columns a bit bigger
+
 //extruder_mount();
 
 // display it for print
-//Xcarriage(1);
+Xcarriage(1);
 
 // render it for model
 //XcarriageModel();
 
-Xcarriage_with_wheels();
+//Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion= 20;
 extrusion_width= get_xgantry_width()+extrusion; // the side that the wheels run on
 extrusion_height= 20;
+
+line_ht= 3.6; // height of line above extrusion
 
 // the thickness of the base
 thickness = 10;
@@ -61,7 +65,7 @@ module XcarriageModel() {
 	%translate([0, wheel_separation/2, -10]) rotate([0, 0, 0]) Xgantry();
 
 	// show extruder and hotend
-	translate([0,wheel_separation/2,-thickness-5]) rotate([0,180,0]) extruder();
+	//translate([0,wheel_separation/2,-thickness-5]) rotate([0,180,0]) extruder();
 }
 
 module Xcarriage_with_wheels() {
@@ -81,7 +85,7 @@ module wheel_pillar(){
 	ht= pillarht;
 	translate([0,0,ht/2]) union() {
 		cylinder(r1=pillardia/2, r2=16/2, h=ht, center=true);
-		translate([0,0,ht/2-0.05]) cylinder(r=bearingID/2, h=bearingThickness+wheel_indent, $fn=64);
+		translate([0,0,ht/2-0.05]) cylinder(r=bearingID/2+columnfudge, h=bearingThickness+wheel_indent, $fn=64);
 		translate([0,0,ht/2-0.05]) cylinder(r1=16/2, r2= bearingShaftCollar/2, h=wheel_indent);
 	}
 }
@@ -139,6 +143,18 @@ module Xcarriage(print=1) {
 		translate([0,wheelpos[2][1]+pillardia/2+2,-thickness/2]) rotate([90,0,0]) hole(3,pillardia/2);
 		translate([0,wheelpos[2][1]+9/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
 		#translate([0,wheelpos[2][1]+9/2-3/2,0]) cube([5.46,3,thickness], center=true);
+
+		// groove for through cable
+		#translate([0,wheel_separation/2+get_xgantry_width()/2-extrusion/2+2,-1]) cube([200,5,line_ht], center=true);
+
+		// termination for fixed cable
+		#translate([36,wheel_separation/2-get_xgantry_width()/2+extrusion/2-2,-1.5]) cube([25,10,6], center=true);
+		#translate([36-25/2+3,wheel_separation/2-get_xgantry_width()/2+extrusion/2-1.5,-20/2]) hole(3, 20);
+
+		mirror([1,0,0]) {
+			#translate([36,wheel_separation/2-get_xgantry_width()/2+extrusion/2-2,-1.5]) cube([25,10,6], center=true);
+			#translate([36-25/2+3,wheel_separation/2-get_xgantry_width()/2+extrusion/2-1.5,-20/2]) hole(3, 20);
+		}
 		
 	}
 }
@@ -161,7 +177,6 @@ module extruder_mount() {
 			cube([w, l, height], center=true);
 			cylinder(r=15, h=height+1, center=true, $fn=16);
 		  #for (a = [-25,25]) translate([0, a, -height]) hole(holes, 2*height);
-		  #for (a = [-25,25]) translate([a, 0, -height]) hole(holes, 2*height);
 		}
 	}
 }
