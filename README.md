@@ -17,10 +17,10 @@ Currently using line driven, and just XY moves...
 * [second movement](http://youtu.be/p5AFRTE33c4)
 * [Drawing big circle](http://youtu.be/9L7iuisqjXY)
 
-Idlers were PLA printed V idlers, but they didn;t seem to be very good
+Idlers were PLA printed V idlers, but they didn't seem to be very good
 with tight spectra, so I made some simple collars that go on both ends
 of the bearing so the spectra runs on the metal bearing surface, it's
-much better.
+much better. Use the idlercollar stl, press fit onto each end of bearing with a vice.
 
 Still have a little lateral motion in Y direction when X is moving,
 need to tighten things up.
