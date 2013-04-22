@@ -3,7 +3,7 @@ use <w-wheel.scad>
 use <myLibs.scad>
 use <XGantry.scad>
 
-columnfudge= 0.1; //fudge factor to get columns a bit bigger
+columnfudge= 0.0; //fudge factor to get columns a bit bigger
 
 //extruder_mount();
 
