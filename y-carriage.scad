@@ -1,12 +1,13 @@
 use <misumi-parts-library.scad>
 use <w-wheel.scad>
 use <myLibs.scad>
+use <XGantry.scad>
 
 // display it for print
-Ycarriage(1);
+//Ycarriage(1);
 
 // render it for model
-//YcarriageModel();
+YcarriageModel();
 
 //Ycarriage_with_wheels();
 
@@ -15,7 +16,7 @@ extrusion_width= 20; // the side that the wheels run on
 extrusion_height= 20;
 
 // the thickness of the base
-thickness = 10;
+thickness = 8;
 
 wheel_diameter = w_wheel_dia();
 wheel_width= w_wheel_width();
@@ -54,8 +55,9 @@ module YcarriageModel() {
 	
 	// show 2020 beam we are riding on
 	%translate([200/2, wheel_separation/2, wheel_z]) rotate([0, 0, 90]) hfs2020(200);
-
-	%translate([0, -20, -thickness]) rotate([90,0,90]) hfs2020(50);
+	
+	// Gantry
+    %translate([0,get_xgantry_length()/2+10,-32-thickness]) rotate([0,0,90]) Xgantry(0);
 }
 
 module Ycarriage_with_wheels() {
@@ -77,7 +79,7 @@ module wheel_pillar(){
 	}
 }
 
-module base() {
+module oldbase() {
 	co= 33;
 	r= pillardia/2;
 	difference() {
@@ -127,8 +129,23 @@ module Ycarriage(print=1) {
 		// grub screw at bottom for adjusting tightness of bottom wheel
 		translate([0,wheelpos[2][1]+pillardia/2+2,-thickness/2]) rotate([90,0,0]) hole(3,pillardia/2);
 		translate([0,wheelpos[2][1]+9/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
-		#translate([0,wheelpos[2][1]+9/2-3/2,0]) cube([5.46,3,thickness], center=true);
+		#translate([0,wheelpos[2][1]+9/2,0]) cube([5.46,3,thickness], center=true);
 		
+	}
+}
+
+module base() {
+	thick= thickness;
+	w= get_xgantry_width()+extrusion_width;
+	l= 70;
+	co= 25;
+	translate([0,l/2-pillardia/2,-thickness+0.05]) difference() {
+		translate([0,0,thick/2]) cube([w,l,thick], center= true);
+		// mounting holes base
+		#translate([-w/2+extrusion_width/2,18,0-1]) hole(5, thick+2);
+		#translate([w/2-extrusion_width/2,18,0-1]) hole(5, thick+2);
+		#translate([0,-l/2+10,-1]) rotate([0,0,90]) slot(5, 10, thick+2);
+		translate([0,0,-0.1]) cylinder(r=co/2, h= thickness+0.2);
 	}
 }
 
