@@ -1,6 +1,6 @@
 use <misumi-parts-library.scad>;
-use <y-carriage.scad>;
-use <xgantry-plate.scad>;
+//use <y-carriage.scad>;
+//use <xgantry-plate.scad>;
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -29,7 +29,7 @@ function get_xgantry_length()= xgantry_length;
 
 gantry(0);
 //translate([0,0,carriage_ht]) rotate([0,0,0]) extruder();
-translate([sep1+10,0,carriage_ht-10]) rotate([0,0,90]) mounting_plate();
+//translate([sep1+10,0,carriage_ht-10]) rotate([0,0,90]) mounting_plate();
 
 // extruder and head
 module extruder() {

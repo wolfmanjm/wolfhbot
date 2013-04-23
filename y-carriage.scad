@@ -36,7 +36,10 @@ clearance= 0; // increase for more clearance, decrease for tighter fit
 wheel_separation= extrusion_width+wheel_diameter+clearance-wheel_penetration*2; // separation of two wheels and bottom wheel for given extrusion
 
 // calculate separation of top two wheels to make an equilateral triangle
-wheel_distance= (wheel_separation/tan(60))*2; // distance from wheel center to center of top two wheels
+//wheel_distance= (wheel_separation/tan(60))*2; // distance from wheel center to center of top two wheels
+// wider is more stable
+wheel_distance= 100;
+
 echo("wheel distance= ", wheel_distance);
 
 wheel_z= pillarht+wheel_width/2;
@@ -134,13 +137,23 @@ module Ycarriage(print=1) {
 	}
 }
 
+// new base that incorporates xgantry being bolted to it
 module base() {
 	thick= thickness;
 	w= get_xgantry_width()+extrusion_width;
 	l= 70;
 	co= 25;
+	r= pillardia/2;
 	translate([0,l/2-pillardia/2,-thickness+0.05]) difference() {
-		translate([0,0,thick/2]) cube([w,l,thick], center= true);
+		union() {
+			translate([0,0,thick/2]) cube([w,l,thick], center= true);
+			translate([0,-l/2+pillardia/2,0]) linear_extrude(height= thick) hull() {
+			translate([-wheel_distance/2,0,0]) circle(r= r);
+			translate([wheel_distance/2,0,0]) circle(r= r);
+			translate([0,wheel_separation,0]) circle(r= r);
+		}
+
+		}
 		// mounting holes base
 		#translate([-w/2+extrusion_width/2,18,0-1]) hole(5, thick+2);
 		#translate([w/2-extrusion_width/2,18,0-1]) hole(5, thick+2);
