@@ -79,10 +79,14 @@ translate([bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 translate([-bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 
 
+
+///////////////////// end frame ///////////////////////
+
 // Bed
-translate([0,0, 180]) bed_assembly();
+translate([0,0, 180]) bed_assembly(1);
 //scale([4,4,4]) rotate([90,0,0]) import("jack2.stl");
 
+/*
 // X gantry
 translate([0,0,height+extrusion/2]) gantry();
 
@@ -102,6 +106,6 @@ translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+10]) spool();
 ih= height+20;
 translate([-sides/2-extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,90]) idler_mount();
 translate([sides/2+extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,180]) idler_mount();
-
+*/
 
 
