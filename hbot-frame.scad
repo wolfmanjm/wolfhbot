@@ -3,7 +3,9 @@ use <bed.scad>;
 use <XGantry.scad>
 use <motor-bracket.scad>
 use <x-carriage.scad>
+use <y-carriage.scad>
 use <sg-spool.scad>
+use <idler-corner.scad>
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -13,6 +15,14 @@ height= sides-extrusion/2;
 bsep= sides/2;
 bsep1= sides/2+extrusion/2;
 bheight= sides-extrusion;
+
+module gantry(xpos=0) {
+        translate([0,0,-2]) Xgantry(xpos);
+        translate([sep1+10,0,-10]) rotate([0,0,90]) Ycarriage_with_wheels();
+        translate([-sep1-10,0,-10]) rotate([0,0,-90]) Ycarriage_with_wheels();
+
+}
+
 
 // bottom
 translate([-sep1,-sep/2,extrusion/2]) hfs2020(sides);
@@ -69,15 +79,29 @@ translate([bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 translate([-bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 
 
+// Bed
 translate([0,0, 180]) bed_assembly();
 //scale([4,4,4]) rotate([90,0,0]) import("jack2.stl");
 
+// X gantry
 translate([0,0,height+extrusion/2]) gantry();
-translate([0,-get_xgantry_width()/2-10,height+extrusion/2+30]) Xcarriage_with_wheels();
 
+
+translate([0,-get_xgantry_width()/2-10,height+extrusion/2+20]) Xcarriage_with_wheels();
+
+
+// Motors
 mh= height+10;
-translate([-sides/2-extrusion,sides/2+extrusion,mh+20]) rotate([180,0,90]) motor_bracket(0);
-translate([sides/2+extrusion,sides/2+extrusion,mh+20]) rotate([180,0,90]) motor_bracket(1);
+translate([-sides/2-extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(0);
+translate([sides/2+extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(1);
 
-translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+20]) spool();
-translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+20]) spool();
+translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+10]) spool();
+translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+10]) spool();
+
+//corner idlers
+ih= height+20;
+translate([-sides/2-extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,90]) idler_mount();
+translate([sides/2+extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,180]) idler_mount();
+
+
+

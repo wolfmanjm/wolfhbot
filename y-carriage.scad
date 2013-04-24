@@ -4,10 +4,10 @@ use <myLibs.scad>
 use <XGantry.scad>
 
 // display it for print
-//Ycarriage(1);
+Ycarriage(1);
 
 // render it for model
-YcarriageModel();
+//YcarriageModel();
 
 //Ycarriage_with_wheels();
 
@@ -124,15 +124,15 @@ module Ycarriage(print=1) {
 		if(print == 1) {
 			translate([wheelpos[2][0], wheel_separation+pillardia+5, -50/2]) hole(3,50);
 			// slot for adjustable wheel
-		   translate([wheelpos[2][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,9,50);
+		   translate([wheelpos[2][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,12,50);
 		}else{
 			translate([wheelpos[2][0], wheelpos[2][1], -50/2]) hole(3,50);
 		}
 
 		// grub screw at bottom for adjusting tightness of bottom wheel
 		translate([0,wheelpos[2][1]+pillardia/2+2,-thickness/2]) rotate([90,0,0]) hole(3,pillardia/2);
-		translate([0,wheelpos[2][1]+9/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
-		#translate([0,wheelpos[2][1]+9/2,0]) cube([5.46,3,thickness], center=true);
+		translate([0,wheelpos[2][1]+9/2+1,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=2.5);
+		#translate([0,wheelpos[2][1]+9/2+1,0]) cube([5.46,2.5,thickness], center=true);
 		
 	}
 }
