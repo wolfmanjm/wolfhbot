@@ -43,6 +43,16 @@ All Aluminum parts are from Misumi with Misumi part numbers
 * lots of M5 nuts and bolts
 * lots of M3 nuts and bolts
 
+Printed Parts
+-------------
+* 2x idler-corner.stl
+* 1x motor-bracket-l.stl
+* 1x motor-bracket-r.stl
+* 2x y-carriage.stl
+* 1x x-carriage.stl
+* 4x z-carriage.stl
+
+
 TODO
 ----
 Z bed lifting mechanics not designed yet, looking at a scissor jack arrangement
