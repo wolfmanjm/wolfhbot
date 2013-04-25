@@ -3,8 +3,8 @@ use <z-carriage.scad>
 include <parameters.scad>
 
 mm= 25.4;
-bedw= 350;
-bedl= 350;
+bedw= 12*mm;
+bedl= 12*mm;
 
 len1= sqrt(sides*sides*2)-wheel_diameter+2;
 len2= len1/2 - extrusion/2;
@@ -33,7 +33,7 @@ module bed_brace() {
 }
 
 module bed() {
-	translate([0,0,extrusion/2 + 3/2]) cube([bedw, bedl, 3], center= true);
+	translate([0,0,-extrusion/2-3/2]) cube([bedw, bedl, 3], center= true);
 }
 
 module carriage(w=0) {
@@ -41,11 +41,13 @@ module carriage(w=0) {
 }
 
 module bed_assembly(w= 0) {
-	bed_brace();
-	bed();
+	rotate([180,0,0]) {
+		bed_brace();
+		bed();
 
-	translate([endx,endy,0]) rotate([0,90,90+45]) carriage(w);
-	translate([-endx, -endy,0]) rotate([0,90,-45]) carriage(w);
-	translate([-endx, endy,0]) rotate([0,90,180+45]) carriage(w);
-	translate([endx, -endy,0]) rotate([0,90,45]) carriage(w);
+		translate([endx,endy,0]) rotate([0,90,90+45]) carriage(w);
+		translate([-endx, -endy,0]) rotate([0,90,-45]) carriage(w);
+		translate([-endx, endy,0]) rotate([0,90,180+45]) carriage(w);
+		translate([endx, -endy,0]) rotate([0,90,45]) carriage(w);
+	}
 }
