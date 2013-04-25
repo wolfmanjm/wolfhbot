@@ -33,8 +33,8 @@ All Aluminum parts are from Misumi with Misumi part numbers
 * 4x  HBLFSNF5 brackets - X Gantry
 * 1x  678mm HFS2020 - Z Bed
 * 2x  329mm HFS2020 - Z Bed
-* 17x W Wheels with bearings (http://3d.grabercars.com/?product=universal-w-delrin-roller-with-bearing)
-* 2x  Delrin Spools for Spectra (http://3d.grabercars.com/?product=filament-drive-reel-grooved-delrin-18mm-o-d)
+* 17x W Wheels with [bearings](http://3d.grabercars.com/?product=universal-w-delrin-roller-with-bearing)
+* 2x  Delrin Spools for [Spectra](http://3d.grabercars.com/?product=filament-drive-reel-grooved-delrin-18mm-o-d)
 * 2x  608zz bearings - for end idlers
 * 4x  605zz bearings - for Gantry idlers
 * several yards of 65lb Spectra fishing line (Powerpro)
@@ -55,12 +55,12 @@ Printed Parts
 
 TODO
 ----
-Z bed lifting mechanics not designed yet, looking at a scissor jack arrangement
+Z bed lifting mechanics not designed yet, looking at a scissor lift arrangement
+
 * 1x Nema 17
-* lead screw
-* steel or aluminum flat iron
-
-
+* 1x lead screw
+* 4x 500mm steel or aluminum flat iron
+* 4x bearings
 
 
 License
