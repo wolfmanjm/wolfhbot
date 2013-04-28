@@ -1,4 +1,8 @@
 use <myLibs.scad>
+use <../MCAD/bearing.scad>
+use <motor-mount.scad>
+
+mm=25.4;
 
 bracket_length= 250;
 
@@ -8,14 +12,25 @@ bracket_length= 250;
 
 //scissors(300*$t);
 
-scissor_lift(410);
+scissor_lift(300);
+translate([0,0,0]) foot();
+translate([0,20,15]) leadscrew();
+translate([20,-7,-10]) rotate([90,0,90]) motorPlate();
+
+// base
+translate([-50,0,-17]) color("white") cube([520,520, 10], center= true);
 
 function get_width()= 10;
 function get_hole_pos()= 5;
-function distance(a,l)= cos(a)*l;
+function distancey(a,l)= cos(a)*l;
+function distancex(a,l)= sin(a)*l;
 
 // return angle required to get given height
 function scissor_height(h,l)= acos((h/4)/(l/2));
+
+module lsnut() {
+	translate([-20/2,0,0]) rotate([0,90,0]) cylinder(r=15, h= 20, $fn=6);
+}
 
 module angle_bracket(l=100) {
 	w= get_width();
@@ -36,20 +51,37 @@ module angle_bracket(l=100) {
 
 module scissor(angle= 45, l= 200) {
 	rotate([0,0,angle]) angle_bracket(l);	
-	translate([]) rotate([0,180,-angle]) angle_bracket(l);
+	translate([0,0,0]) rotate([0,180,-angle]) angle_bracket(l);
 }
 
 module scissor_angle(a, l=200) {	
 	scissor(a,l);
-	translate([0,distance(a,l/2-get_hole_pos())*2,0]) scissor(a,l);
+	translate([0,distancey(a,l/2-get_hole_pos())*2,0]) scissor(a,l);
+	translate([-distancex(a,l/2-get_hole_pos()),-distancey(a,l/2-get_hole_pos()),0]) bearing();
+	translate([-distancex(a,l/2-get_hole_pos()),distancey(a,l/2-get_hole_pos())*3,-7]) bearing();
+	translate([-distancex(a,l/2-get_hole_pos()),-distancey(a,l/2-get_hole_pos())+15,-20]) lsnut();
+
 }
 
 module scissors(h) {
 	l= bracket_length;
 	a= scissor_height(h, l);
-	translate([0,distance(a,l/2),0]) scissor_angle(a, l);
+	translate([-distancex(a,l/2-get_hole_pos()),distancey(a,l/2-get_hole_pos()),0]) scissor_angle(a, l);
 }
 
 module scissor_lift(h) {
 	rotate([90,0,0]) scissors(h);
+}
+
+module leadscrew() {
+	%rotate([0,-90,0]) cylinder(r=0.5*mm/2, h= 12*mm);
+}
+
+// printable objects
+module foot() {
+	translate([0,40/2,-10]) cube([40,40,4], center= true);
+	difference() {
+		translate([0,10/2,0]) cube([40,10,30], center= true);
+		translate([0,20/2+21/2,0]) rotate([90,0,0]) hole(5, 22);
+	}
 }

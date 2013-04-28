@@ -80,15 +80,17 @@ translate([-bsep1, -bsep, bheight]) rotate([180,0,180]) hblfsn5();
 translate([bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 translate([-bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 
-
+// Base
+translate([0,0,raised-10/2]) color("white") cube([520,520, 10], center= true);
 
 ///////////////////// end frame ///////////////////////
 
 // Bed
-//bedh= 410; //top
-bedh= 140; // bottom
-translate([0,0, bedh]) bed_assembly(1,76);
-rotate([0,0,45]) scissor_lift(bedh);
+//bedh= 370; //top
+//bedh= 95; // bottom
+bedh= 232;
+translate([0,0, raised+10+bedh]) bed_assembly(1,76);
+translate([50,50,raised+10]) rotate([0,0,45]) scissor_lift(bedh);
 
 // X gantry
 if(1) {
