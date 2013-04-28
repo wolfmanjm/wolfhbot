@@ -1,6 +1,6 @@
 include <parameters.scad>
 use <myLibs.scad>
-use <w-wheel.scad>
+//use <w-wheel.scad>
 use <misumi-parts-library.scad>
 
 thick= 5;
@@ -14,11 +14,15 @@ offset=20;
 
 echo("Wheel distance= ", wheel_distance);
 
-z_carriage(0);
+z_carriage(1);
 //%support();
 
 //wheel_pillar();
 //extr_attach();
+
+module w_wheel() {
+	import("w-wheel.stl");
+}
 
 module support() {
 	// show W Wheels
@@ -46,7 +50,7 @@ module z_carriage(wheels= 0) {
 
 	if(wheels == 1) {
 		// show W Wheels
-		%for(p=wheelpos)
+		for(p=wheelpos)
 			translate(p+[-offset,0,pillarht]) w_wheel();		
 	}
 }

@@ -6,6 +6,7 @@ use <x-carriage.scad>
 use <y-carriage.scad>
 use <sg-spool.scad>
 use <idler-corner.scad>
+use <scissor-lift.scad>
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -25,10 +26,11 @@ module gantry(xpos=0) {
 
 
 // bottom
-translate([-sep1,-sep/2,extrusion/2]) hfs2020(sides);
-translate([sep1,-sep/2,extrusion/2]) hfs2020(sides);
-translate([sep/2,sep1,extrusion/2]) rotate([0,0,90]) hfs2020(sides);
-translate([sep/2,-sep1,extrusion/2]) rotate([0,0,90]) hfs2020(sides);
+raised= 30;
+translate([-sep1,-sep/2,extrusion/2+raised]) hfs2020(sides);
+translate([sep1,-sep/2,extrusion/2+raised]) hfs2020(sides);
+translate([sep/2,sep1,extrusion/2+raised]) rotate([0,0,90]) hfs2020(sides);
+translate([sep/2,-sep1,extrusion/2+raised]) rotate([0,0,90]) hfs2020(sides);
 
 // verticals
 translate([-sep1,-sep1,0]) rotate([90,0,0]) hfs2020(sides);
@@ -43,22 +45,22 @@ translate([sep/2,sep1,height]) rotate([0,0,90]) hfs2020(sides);
 translate([sep/2,-sep1,height]) rotate([0,0,90]) hfs2020(sides);
 
 // brackets inside bottom corner lr
-translate([bsep, -sep1, extrusion]) rotate([0,0,90]) hblfsn5();
-translate([-bsep, -sep1, extrusion]) rotate([0,0,-90]) hblfsn5();
-translate([bsep, sep1, extrusion]) rotate([0,0,90]) hblfsn5();
-translate([-bsep, sep1, extrusion]) rotate([0,0,-90]) hblfsn5();
+translate([bsep, -sep1, raised]) rotate([0,180,90]) hblfsn5();
+translate([-bsep, -sep1, raised]) rotate([0,180,-90]) hblfsn5();
+translate([bsep, sep1, raised]) rotate([0,180,90]) hblfsn5();
+translate([-bsep, sep1, raised]) rotate([0,180,-90]) hblfsn5();
 
 // brackets inside bottom corner bf
-translate([bsep1, -bsep, extrusion]) rotate([0,0,0]) hblfsn5();
-translate([-bsep1, -bsep, extrusion]) rotate([0,0,0]) hblfsn5();
-translate([bsep1, bsep, extrusion]) rotate([0,0,180]) hblfsn5();
-translate([-bsep1, bsep, extrusion]) rotate([0,0,180]) hblfsn5();
+translate([bsep1, -bsep, raised]) rotate([180,0,180]) hblfsn5();
+translate([-bsep1, -bsep, raised]) rotate([180,0,180]) hblfsn5();
+translate([bsep1, bsep, raised]) rotate([180,0,0]) hblfsn5();
+translate([-bsep1, bsep, raised]) rotate([180,0,0]) hblfsn5();
 
 // brackets bottom corner
-translate([bsep, -bsep, extrusion/2]) rotate([0,90,90]) hblfsn5();
-translate([-bsep, -bsep, extrusion/2]) rotate([0,90,0]) hblfsn5();
-translate([bsep, bsep, extrusion/2]) rotate([0,90,180]) hblfsn5();
-translate([-bsep, bsep, extrusion/2]) rotate([0,90,-90]) hblfsn5();
+translate([bsep, -bsep, extrusion/2+raised]) rotate([0,90,90]) hblfsn5();
+translate([-bsep, -bsep, extrusion/2+raised]) rotate([0,90,0]) hblfsn5();
+translate([bsep, bsep, extrusion/2+raised]) rotate([0,90,180]) hblfsn5();
+translate([-bsep, bsep, extrusion/2+raised]) rotate([0,90,-90]) hblfsn5();
 
 // brackets top corner
 translate([bsep, -bsep, height]) rotate([0,90,90]) hblfsn5();
@@ -83,29 +85,33 @@ translate([-bsep1, bsep, bheight]) rotate([180,0,0]) hblfsn5();
 ///////////////////// end frame ///////////////////////
 
 // Bed
-translate([0,0, 180]) bed_assembly(1);
-//scale([4,4,4]) rotate([90,0,0]) import("jack2.stl");
-
+//bedh= 410; //top
+bedh= 140; // bottom
+translate([0,0, bedh]) bed_assembly(1,76);
+rotate([0,0,45]) scissor_lift(bedh);
 
 // X gantry
-translate([0,0,height+extrusion/2]) gantry();
-
-
-translate([0,-get_xgantry_width()/2-10,height+extrusion/2+20]) Xcarriage_with_wheels();
+if(1) {
+	translate([0,0,height+extrusion/2]) gantry();
+	translate([0,-get_xgantry_width()/2-10,height+extrusion/2+20]) Xcarriage_with_wheels();
+}
 
 
 // Motors
 mh= height+10;
-translate([-sides/2-extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(0);
-translate([sides/2+extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(1);
+if(0) {
+	translate([-sides/2-extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(0);
+	translate([sides/2+extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(1);
+	
+	translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+10]) spool();
+	translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+10]) spool();
+}
 
-translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+10]) spool();
-translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+10]) spool();
-
-//corner idlers
 ih= height+20;
-translate([-sides/2-extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,90]) idler_mount();
-translate([sides/2+extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,180]) idler_mount();
-
+if(0) {
+	//corner idlers
+	translate([-sides/2-extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,90]) idler_mount();
+	translate([sides/2+extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,180]) idler_mount();
+}
 
 
