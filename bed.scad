@@ -1,5 +1,5 @@
 use <misumi-parts-library.scad>;
-use <z-carriage.scad>
+use <z-carriage-3wheel.scad>
 include <parameters.scad>
 
 mm= 25.4;

@@ -12,13 +12,14 @@ bracket_length= 250;
 
 //scissors(300*$t);
 
+// 120 - 420
 scissor_lift(300);
 translate([0,0,0]) foot();
 translate([0,20,15]) leadscrew();
 translate([20,-7,-10]) rotate([90,0,90]) motorPlate();
 
 // base
-translate([-50,0,-17]) color("white") cube([520,520, 10], center= true);
+translate([-50,0,-17]) color("white") cube([500,500, 10], center= true);
 
 function get_width()= 10;
 function get_hole_pos()= 5;
@@ -67,6 +68,7 @@ module scissors(h) {
 	l= bracket_length;
 	a= scissor_height(h, l);
 	translate([-distancex(a,l/2-get_hole_pos()),distancey(a,l/2-get_hole_pos()),0]) scissor_angle(a, l);
+	echo("d= ", sqrt((l/2*l/2) - (h/4*h/4))*2);
 }
 
 module scissor_lift(h) {
