@@ -17,6 +17,7 @@ Currently using line driven, and just XY moves...
 * [second movement](http://youtu.be/p5AFRTE33c4)
 * [Drawing big circle](http://youtu.be/9L7iuisqjXY)
 * [Insane speed circle](http://youtu.be/wYBltiACMb0)
+* [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 
 Idlers are bearings with some simple collars that go on both ends
 of the bearing so the spectra runs on the metal bearing surface.
