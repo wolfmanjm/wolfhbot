@@ -7,7 +7,7 @@ The plans are use 2020 Misumi extrusions for most of the frame.
 
 * The XY carriages will run on the extrusions on Steve Grabers Universal W Wheels.
 * The drive will use #25 Roller chain, but currently uses 65lb Spectra fishing line and machined spools.
-* The Z bed lifting mechanism will be a scissor Jack arrangement.
+* The Z bed lifting mechanism TBD
 * build volume is around 12 inches cubed (300x300x300 mm)
 
 
@@ -18,10 +18,16 @@ Currently using line driven, and just XY moves...
 * [Drawing big circle](http://youtu.be/9L7iuisqjXY)
 * [Insane speed circle](http://youtu.be/wYBltiACMb0)
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
+* [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
 Idlers are bearings with some simple collars that go on both ends
 of the bearing so the spectra runs on the metal bearing surface.
 Use the idlercollar stl, press fit onto each end of bearing with a vice.
+
+The scissor lift idea was nice but the prototype showed that a Nema17 did
+not have enough torque to lift the bed.  I think the bottom of the
+scissor lift needs to lift 4 times the weight so any pressure on the
+top caused the motor to skip. So onto the next idea.
 
 BOM
 ---

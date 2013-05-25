@@ -1,5 +1,4 @@
 use <myLibs.scad>
-use <../MCAD/bearing.scad>
 use <motor-mount.scad>
 
 mm=25.4;
@@ -8,29 +7,34 @@ bracket_length= 250;
 hole_size= 5;
 roddia= 0.25*mm;
 capthick= 4;
+basey= -22;
 
 //translate([-get_width()/2,0,0]) angle_bracket(200);
+//scissor_lift(100);
 
 //scissor_angle(70);
 
-print= 0;
-if(print == 1) {
-	translate([0,-20,roddia/2+capthick]) rotate([-90,0,0]) cap();	
-	translate([0,20,0]) rotate([90,0,0]) foot();
+show(0);
 
-}else if(print == 0){
-	// 120 - 420
-	scissor_lift(300);
-	translate([0,0,0]) foot();
-	translate([0,20,15]) leadscrew();
-	translate([20,-7,-10]) rotate([90,0,90]) motorPlate();
+module show(print= 0) {
+	if(print == 1) {
+		translate([0,-20,roddia/2+capthick]) rotate([-90,0,0]) cap();	
+		translate([0,20,0]) rotate([90,0,0]) foot();
 	
-	// base
-	translate([-50,0,-17]) color("white") cube([500,500, 10], center= true);
-	// bottom running rod 1/4" round
-	color("blue") translate([0,-3,-10]) rotate([0,-90,0]) cylinder(r=0.25*mm/2, h= 300);
-}else{
-	scissor_lift(120+((420-120)*$t));
+	}else if(print == 0){
+		// 120 - 420
+		scissor_lift(120);
+		translate([0,0,0]) foot();
+		translate([30,35,basey+25]) leadscrew();
+		translate([50,-7+15,basey]) rotate([90,0,90]) motorPlate();
+		
+		// base
+		translate([-50,0,basey-10/2]) color("white") cube([500,500, 10], center= true);
+		// bottom running rod 1/4" round
+		color("blue") translate([0,-18/2,basey+0.25*mm/2]) rotate([0,-90,0]) cylinder(r=0.25*mm/2, h= 300);
+	}else{
+		scissor_lift(120+((420-120)*$t));
+	}
 }
 
 function get_width()= 19;
@@ -41,8 +45,13 @@ function distancex(a,l)= sin(a)*l;
 // return angle required to get given height
 function scissor_height(h,l)= acos((h/4)/(l/2));
 
+module bearing() {
+	cylinder(r=33/2, h=18);
+}
+
 module lsnut() {
-	translate([-20/2,0,0]) rotate([0,90,0]) cylinder(r=15, h= 20, $fn=6);
+	rotate([30,0,0]) rotate([0,90,0]) cylinder(r=15, h= 20, $fn=6);
+	translate([0,0,8]) cube([20,30,5]);
 }
 
 module angle_bracket(l=100) {
@@ -71,11 +80,10 @@ module scissor_angle(a, l=200) {
 	x= distancex(a,l/2-get_hole_pos());
 	y= distancey(a,l/2-get_hole_pos());
 
-	scissor(a,l);
+	rotate([180,0,0]) scissor(a,l);
 	translate([0,y*2,0]) scissor(a,l);
 	translate([-distancex(a,l/2-get_hole_pos()),-y,0]) bearing();
 	translate([-distancex(a,l/2-get_hole_pos()),y*3,-7]) bearing();
-	translate([-distancex(a,l/2-get_hole_pos()),-y+15,-20]) lsnut();	
 }
 
 module scissors(h) {
@@ -84,6 +92,9 @@ module scissors(h) {
 	y= distancey(a,l/2-get_hole_pos());
 	x= distancex(a,l/2-get_hole_pos());
 	translate([-x,y,0]) scissor_angle(a, l);
+
+	// nut
+	translate([-x*2,basey+25,-35]) lsnut();	
 
 	// top plate
 	translate([0,y*4+10,0]) cap();
@@ -101,9 +112,9 @@ module leadscrew() {
 
 // printable objects
 module foot() {
-	translate([0,40/2,-10]) cube([40,40,4], center= true);
+	translate([0,40/2,4/2+basey]) cube([40,40,4], center= true);
 	difference() {
-		translate([0,10/2,0]) cube([40,10,30], center= true);
+		translate([0,10/2,0]) cube([40,10,-basey*2], center= true);
 		translate([0,20/2+21/2,0]) rotate([90,0,0]) hole(hole_size, 22);
 	}
 }
