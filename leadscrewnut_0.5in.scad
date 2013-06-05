@@ -1,9 +1,10 @@
 use <Thread_Library.scad>
 
 mm= 25.4;
+ht= 4; // 20;
 
 trapezoidNut(
-	length=20, 				// axial length of the threaded rod 
+	length=ht, 				// axial length of the threaded rod 
 	radius=15, 				// outer radius of the nut	
 	pitch=0.076923*mm, 		// axial distance from crest to crest
 	pitchRadius=12/2, 			// radial distance from center to mid-profile

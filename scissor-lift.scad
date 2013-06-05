@@ -1,20 +1,23 @@
 use <myLibs.scad>
 use <motor-mount.scad>
+use <misumi-parts-library.scad>;
 
 mm=25.4;
 
-bracket_length= 250;
+bracket_length= 330;
 hole_size= 5;
 roddia= 0.25*mm;
 capthick= 4;
 basey= -22;
+stages= 1;
 
 //translate([-get_width()/2,0,0]) angle_bracket(200);
 //scissor_lift(100);
 
 //scissor_angle(70);
 
-show(0);
+//show(0);
+rotate([0,180,0]) cap();
 
 module show(print= 0) {
 	if(print == 1) {
@@ -23,15 +26,16 @@ module show(print= 0) {
 	
 	}else if(print == 0){
 		// 120 - 420
-		scissor_lift(120);
+		// 1 stage 65 - 320
+		scissor_lift(200);
 		translate([0,0,0]) foot();
-		translate([30,35,basey+25]) leadscrew();
-		translate([50,-7+15,basey]) rotate([90,0,90]) motorPlate();
+		translate([-30,35,basey+25]) leadscrew();
+		translate([0,-7+15,basey]) rotate([90,0,90]) motorPlate();
 		
 		// base
-		translate([-50,0,basey-10/2]) color("white") cube([500,500, 10], center= true);
+		translate([-80,0,basey-10/2]) color("white") cube([540,540, 10], center= true);
 		// bottom running rod 1/4" round
-		color("blue") translate([0,-18/2,basey+0.25*mm/2]) rotate([0,-90,0]) cylinder(r=0.25*mm/2, h= 300);
+		color("blue") translate([0,-18/2,basey+0.25*mm/2]) rotate([0,-90,0]) cylinder(r=0.25*mm/2, h= 340);
 	}else{
 		scissor_lift(120+((420-120)*$t));
 	}
@@ -43,7 +47,7 @@ function distancey(a,l)= cos(a)*l;
 function distancex(a,l)= sin(a)*l;
 
 // return angle required to get given height
-function scissor_height(h,l)= acos((h/4)/(l/2));
+function scissor_height(h,l)= acos((h/(stages*2))/(l/2));
 
 module bearing() {
 	cylinder(r=33/2, h=18);
@@ -79,11 +83,14 @@ module scissor(angle= 45, l= 200) {
 module scissor_angle(a, l=200) {	
 	x= distancex(a,l/2-get_hole_pos());
 	y= distancey(a,l/2-get_hole_pos());
-
 	rotate([180,0,0]) scissor(a,l);
-	translate([0,y*2,0]) scissor(a,l);
+	if(stages==2){
+		translate([0,y*2,0]) scissor(a,l);
+		translate([-distancex(a,l/2-get_hole_pos()),y*3,-7]) bearing();
+	}else{
+		#translate([-distancex(a,l/2-get_hole_pos()),y,-18]) bearing();
+	}
 	translate([-distancex(a,l/2-get_hole_pos()),-y,0]) bearing();
-	translate([-distancex(a,l/2-get_hole_pos()),y*3,-7]) bearing();
 }
 
 module scissors(h) {
@@ -97,7 +104,11 @@ module scissors(h) {
 	translate([-x*2,basey+25,-35]) lsnut();	
 
 	// top plate
-	translate([0,y*4+10,0]) cap();
+	if(stages==2){
+		translate([0,y*4+10,0]) cap();
+	}else{
+		translate([0,y*2,0]) cap();
+	}
 
 	echo("d= ", sqrt((l/2*l/2) - (h/4*h/4))*2);
 }
@@ -121,16 +132,22 @@ module foot() {
 
 module cap() {
 	// top running rod 1/4" round
-	%translate([-20,0,0]) rotate([0,-90,0]) cylinder(r=roddia/2, h= 300-40);
-	union() {
+	%translate([20,10+20,-18/2+6.5]) rotate([0,0,90]) hfs2020(300);
+	%translate([-20,20-roddia/2,-18/2]) rotate([0,-90,0]) cylinder(r=roddia/2, h= 300);
+//	union() {
 		// top plate to attach to underside of bed extrusion
-		translate([-300+20,roddia/2,-10]) cube([300,capthick,30]);
+		//translate([-350+20,roddia/2,-10]) cube([350,capthick,30]);
 	
 		// attachment bracket
 		difference() {
-			cylinder(r=40/2, h=4);
-			translate([-80/2,roddia/2+4,-4]) cube([80,40,10]);
-			#translate([0,-10,-5]) hole(hole_size,10);
+			union() {
+				cylinder(r=40/2, h=4);
+				translate([-40/2,0,0]) cube([40,20,4]);
+				translate([-40/2,20-4,-20+8]) cube([40,4,20-4]);
+				#translate([-40/2,20-4,0]) rotate([0,90,0]) cylinder(r=4, h=40);
+			}
+			#translate([0,0,-5]) hole(hole_size,10);
+			#translate([0,21,-5]) rotate([90,90,0]) slot(d=5,l=10,ht=10);
 		}
-	}
+//	}
 }
