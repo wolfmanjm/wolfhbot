@@ -11,7 +11,7 @@ baselen= depth;
 offset=60;
 
 // third wheel separation
-wheel_sep= sqrt((extrusion*extrusion)*2);
+wheel_sep= 27.3; // sqrt((extrusion*extrusion)*2);
 clearance= 0; // increase for more clearance, decrease for tighter fit
 wheel_penetration=1; // the amount the w wheel fits in the slot
 wheel_separation= wheel_sep+wheel_diameter+clearance-wheel_penetration*2; // separation of two wheels and bottom wheel for given extrusion
@@ -25,9 +25,10 @@ wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
 echo("Wheel distance= ", wheel_distance);
+echo("Wheel separation= ", wheel_sep);
 
 show_wheels= 0;
-print= 0;
+print= 1;
 z_carriage(show_wheels,print);
 %support();
 
@@ -55,7 +56,11 @@ module z_carriage(wheels= 0, print= 0) {
 	translate([-offset,0,0]) difference() {	
 		union () {
 			wheel_mount(print);
-			translate([0,depth-pillardia/2,0]) extr_attach();
+			translate([0,depth-pillardia/2,0]){
+				extr_attach();
+				translate([46,10,0]) rotate([90,0,0]) cylinder(r= 4, h= depth-20);
+				translate([47,-8,-0.5]) rotate([-90,-90,180]) triangle(20, 20, 5);
+			}
 		}
 		for(y=[20, 40, 60]) {
 			#translate([offset,y,-thick-1]) rotate([0,0,0]) hole(5, thick+4);
@@ -103,7 +108,7 @@ module wheel_mount(print=0) {
 				//translate(wheelpos[1]) circle(r= r);
 				translate(wheelpos[2]) circle(r= r);
 				// back support
-				#translate([offset,0,0]) circle(r= extrusion/2);		
+				translate([offset,0,0]) circle(r= extrusion/2);		
 				translate([offset,l,0]) circle(r= extrusion/2);
 			}
 		
