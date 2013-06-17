@@ -29,7 +29,9 @@ echo("Wheel separation= ", wheel_sep);
 
 show_wheels= 0;
 print= 1;
-z_carriage(show_wheels,print);
+//z_carriage(show_wheels,print);
+rotate([0,180,0]) mirror([0,0,1]) z_carriage(show_wheels,print);
+
 %support();
 
 //wheel_pillar();
