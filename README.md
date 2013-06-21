@@ -20,14 +20,25 @@ Currently using line driven, and just XY moves...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
-Idlers are bearings with some simple collars that go on both ends
-of the bearing so the spectra runs on the metal bearing surface.
-Use the idlercollar stl, press fit onto each end of bearing with a vice.
+Four idlers are grooved 4mm bearings that bolt directly to the
+extrusion on the Xgantry. These could be 5mm bearings if you remember
+to put the nuts in the grooves before assembly, I used 4 post
+assembly nuts which take 4mm screws.
 
-The scissor lift idea was nice but the prototype showed that a Nema17 did
-not have enough torque to lift the bed.  I think the bottom of the
+The two end idlers are grooved 5mm bearings that are screwed directly
+into the tapped center of the vertical extrusion. This provides very
+solid idlers than can take the tension of the spectra when it is
+tight.  The grooves are necessary otherwsie the spectra just runs off
+the top or bottom of the bearing.
+
+The scissor lift idea was nice but the prototype showed that a Nema17
+did not have enough torque to lift the bed.  I think the bottom of the
 scissor lift needs to lift 4 times the weight so any pressure on the
-top caused the motor to skip. So onto the next idea.
+top caused the motor to skip. So onto the next idea which is just a
+single stage scissor with longer arms. It may still require more
+torque than the stepper can provide, but the options are to gear the
+steppers down to get more torque, or use a totally different mechanism
+for lifting the Z bed.
 
 BOM
 ---
