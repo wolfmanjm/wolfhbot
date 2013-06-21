@@ -12,10 +12,10 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //extruder_mount();
 
 // display it for print == 1
-//Xcarriage(0);
+Xcarriage(1);
 
 // render it for model
-XcarriageModel();
+//XcarriageModel();
 
 //extruder();
 
@@ -48,11 +48,10 @@ bearingShaftCollar= 6;//???
 
 wheel_penetration=0; // the amount the w wheel fits in the slot
 wheel_clearance= 0; // clearance between the side of the extrusion and the carriage
-pillarht= 1; 
-pillardia= 8;
 
+pillarht= 1; // the amount the bushing sticks out
 bushing_ht= 0.25*mm;
-bushing_dia= 6;
+bushing_dia= 8;
 
 rounding= 22;
 
@@ -139,18 +138,13 @@ module Xcarriage(print=1) {
 
 module Xcarriage_main(print=1) {
 	difference() {
-	   union() {
-			base();
-			translate(wheelpos[0]) wheel_pillar();
-			translate(wheelpos[1]) wheel_pillar();
-			if(print == 1) {
-				// print this one separatley so it can be adjustable
-				translate(wheelpos[2]+[0, rounding+5,-thickness+0.1]) wheel_pillar();
-				translate(wheelpos[3]+[0, rounding+5,-thickness+0.1]) wheel_pillar();
-			}else{
-				translate(wheelpos[2]) wheel_pillar();
-				translate(wheelpos[3]) wheel_pillar();
-			}
+		base();
+
+		for(p=wheelpos) {
+			// bushing holes
+			#translate(p + [0,0,-(bushing_ht-pillarht)]) hole(bushing_dia, bushing_ht);
+			// M5 holes for wheels
+			translate(p + [0,0,-50/2]) hole(5,50);
 		}
 
 		// negative mount for extruder
@@ -158,27 +152,20 @@ module Xcarriage_main(print=1) {
 		// cutout for extruder mount
 		translate([0,wheel_separation/2,-10]) rotate([0,0,90]) mountingplate(4);
 
-		// M5 holes for wheels
-		translate(wheelpos[0] + [0,0,-50/2]) hole(5,50);
-		translate(wheelpos[1] + [0,0,-50/2]) hole(5,50);
-
 		if(print == 1) {
-			translate([wheelpos[2][0], wheel_separation+rounding+5, -50/2]) hole(3,50);
-			// slot for adjustable wheel
-		   translate([wheelpos[2][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,9,50);
-			translate([wheelpos[3][0], wheel_separation+rounding+5, -50/2]) hole(3,50);
-			// slot for adjustable wheel
-		   translate([wheelpos[3][0], wheelpos[2][1], -50/2]) rotate([0,0,90]) slot(3,9,50);
-		}else{
-			translate(wheelpos[2] + [0,0,-50/2]) hole(5,50);
-			translate(wheelpos[3] + [0,0,-50/2]) hole(5,50);
+			for(p= [wheelpos[2], wheelpos[3]]) {
+				// slot for adjustable wheel
+			   translate(p + [0,0,-50/2]) rotate([0,0,90]) slot(5,12,50);
+				// slot for bushing
+			   translate(p + [0,0,-(bushing_ht-pillarht)]) rotate([0,0,90]) slot(bushing_dia,15,bushing_ht);
+			}
 		}
 
 		// grub screw at bottom for adjusting tightness of bottom wheels
 		for(p= [wheelpos[2], wheelpos[3]]) {
-			translate(p+ [0,rounding/2+2,-thickness/2]) rotate([90,0,0]) hole(3,rounding/2);
-			translate(p+ [0,9/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
-			#translate(p+ [0,9/2-3/2,0]) cube([5.46,3,thickness], center=true);
+			translate(p+ [0,rounding/2+2,-thickness/2+3/2]) rotate([90,0,0]) hole(3,rounding/2);
+			translate(p+ [0,14/2+1.0,-thickness/2+3/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
+			translate(p+ [0,14/2,0]) cube([5.46,3,thickness], center=true);
 		}
 
 		// groove for through cable
