@@ -2,7 +2,7 @@ use <misumi-parts-library.scad>;
 use <bed.scad>;
 use <XGantry.scad>
 use <motor-bracket.scad>
-use <x-carriage.scad>
+use <x-carriage-new.scad>
 use <y-carriage.scad>
 use <sg-spool.scad>
 use <idler-corner.scad>
@@ -95,7 +95,7 @@ translate([0,0, raised+10+bedh]) bed_assembly(1,15);
 // X gantry
 if(1) {
 	translate([0,0,height+extrusion/2-raised]) gantry();
-	translate([0,-get_xgantry_width()/2-10,height+extrusion/2-raised+20]) Xcarriage_with_wheels();
+	translate([0,-get_xgantry_width()/2-10,height+extrusion/2-raised+30]) Xcarriage_with_wheels();
 }
 
 

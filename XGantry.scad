@@ -21,13 +21,13 @@ sidelen= Xgantry_width+extrusion;
 echo("side length= ", sidelen);
 echo("gap= ", sidelen-extrusion*2);
 
-%translate([0,0,-height-extrusion/2]) top();
+//%translate([0,0,-height-extrusion/2]) top();
 
 function get_xgantry_width()= Xgantry_width;
 function get_xgantry_length()= xgantry_length;
 
 
-gantry(0);
+Xgantry(0);
 //translate([0,0,carriage_ht]) rotate([0,0,0]) extruder();
 //translate([sep1+10,0,carriage_ht-10]) rotate([0,0,90]) mounting_plate();
 
@@ -35,6 +35,10 @@ gantry(0);
 module extruder() {
 	translate([-2,-2.7,0]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
 	translate([0,10,0]) rotate([90,0,0,0,0]) import("me_body_v5.2_3mm.stl");
+}
+
+module openrail(l= 500) {
+        rotate([90,0,90]) import("openrail500.stl");
 }
 
 module gantry(xpos=0) {
@@ -55,6 +59,12 @@ module Xgantry(xpos= 0) {
 	translate([xgantry_length/2,Xgantry_width/2-10,carriage_ht-10]) rotate([0,-90,90]) hblfsnf5();
 	translate([-xgantry_length/2,-Xgantry_width/2+10,carriage_ht-10]) rotate([0,-90,-90]) hblfsnf5();
 	translate([-xgantry_length/2,Xgantry_width/2-10,carriage_ht+10]) rotate([0,90,-90]) hblfsnf5();
+
+	color("black") {
+		translate([0, -get_xgantry_width()/2-10.8, carriage_ht+10]) openrail();
+		translate([0, get_xgantry_width()/2+10.8, carriage_ht+10]) rotate([0,0,180]) openrail();
+	}
+  
 }
 
 

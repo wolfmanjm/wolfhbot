@@ -12,14 +12,14 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //extruder_mount();
 
 // display it for print == 1
-Xcarriage(1);
+//Xcarriage(1);
 
 // render it for model
 //XcarriageModel();
 
 //extruder();
 
-//Xcarriage_with_wheels();
+Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion= 20;
@@ -31,7 +31,7 @@ line_ht= 3.6; // height of line above extrusion
 // the thickness of the base
 thickness = 10;
 
-mountingplate_w= 25.6+2;
+mountingplate_w= 25.6+5;
 mountingplate_l= 70+2;
 mountingplate_h= 5;
 
@@ -70,43 +70,35 @@ wheelpos= [ [-wheel_distance/2, 0, 0], [wheel_distance/2, 0, 0], [-wheel_distanc
 
 function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
 
-module openrail(l= 500) {
-	rotate([-90,0,90]) import("openrail500.stl");
-}
-
 module XcarriageModel() {
 	Xcarriage(0);
 	
 	// show V Wheels
 	for(p= wheelpos) {
-		translate(p + [0, 0, wheel_z]) v_wheel();
+		translate(p + [0, 0, -wheel_z]) v_wheel();
 	}
 	
 	// show what we are riding on
-	translate([0, get_xgantry_width()/2+10+wheel_diameter/2,  wheel_z]) {
+	translate([0, get_xgantry_width()/2+10+wheel_diameter/2,  -wheel_z-20]) {
 		translate([0,0,-11.5]) Xgantry();
-		color("black") {
-			translate([0, -get_xgantry_width()/2-10.8, 0]) openrail();
-			translate([0, get_xgantry_width()/2+10.8, 0]) rotate([0,0,180]) openrail();
-		}
 		// bolt head
-		color("blue") translate([0,-get_xgantry_width()/2,-4.5]) cylinder(r=10/2, h=2);
+		color("blue") translate([0,-get_xgantry_width()/2,22]) cylinder(r=10/2, h=2);
 	}
 
 	// show extruder and hotend
-	translate([0,wheel_separation/2,-thickness/2]) rotate([0,180,0]) extruder();
+	translate([0,wheel_separation/2,thickness/2]) rotate([0,0,0]) extruder();
 }
 
 module Xcarriage_with_wheels() {
-	rotate([0,180,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
+	translate([0,-wheel_diameter/2,wheel_z]) {	
 		Xcarriage(0);
 	
 		// show W Wheels
 		for(p=wheelpos)
-			translate(p + [0, 0, wheel_z]) v_wheel();
+			translate(p + [0, 0, -wheel_z]) v_wheel();
 	
 		// show extruder and hotend
-		translate([0,wheel_separation/2,-thickness-5]) rotate([0,180,0]) extruder();
+		translate([0,wheel_separation/2,thickness/2]) extruder();
 	}
 }
 
@@ -124,15 +116,17 @@ module base() {
 	}
 }
 
-module Xcarriage(print=1) {		
-	if(print == 1) {
-		union() {
-			Xcarriage_main(1);
-			// bridging support layer
-			translate([0,wheel_separation/2,-5]) rotate([0,0,90]) mountingplate(4, 1);
+module Xcarriage(print=1) {	
+	rotate([0,180,0]) {	
+		if(print == 1) {
+			union() {
+				Xcarriage_main(1);
+				// bridging support layer
+				//translate([0,wheel_separation/2,-5]) rotate([0,0,90]) mountingplate(4, 1);
+			}
+		}else{
+			Xcarriage_main(0);
 		}
-	}else{
-		Xcarriage_main(0);
 	}
 }
 
