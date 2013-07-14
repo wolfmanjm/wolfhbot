@@ -41,6 +41,14 @@ module hblfssw5() {
 	color("blue") import("misumi/hblfssw5.stl");
 }
 
+module hbl45ts5() {
+	color("blue") import("misumi/hbl45ts5.stl");
+}
+
+module hbl135ts5() {
+	color("blue") import("misumi/hbl135ts5.stl");
+}
+
 module flatbracket2x2() {
 	// HPTSd5
 	difference() {

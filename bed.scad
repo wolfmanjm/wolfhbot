@@ -15,7 +15,6 @@ c45= cos(45);
 endx= len1/2*s45;
 endy= len1/2*c45;
 
-echo("main length= ", len1, ", side length= ", len2);
 
 // show a tower
 sep1= sides/2+extrusion/2;
@@ -28,9 +27,11 @@ bed_assembly(1, 76);
 
 module bed_brace() {
 	l= len1-40;
+	l2= len2-20+8;
+	echo("main length= ", l, ", side length= ", l2);
 	rotate([0,0,45]) translate([0,-l/2,0]) hfs2020(l);
 	//rotate([0,0,-45]) translate([0,extrusion/2,0]) hfs2020(len2);
-	//rotate([0,0,135]) translate([0,extrusion/2,0]) hfs2020(len2);
+	rotate([0,0,135]) translate([-3.6,extrusion/2-3.6,0]) hfs2020(l2);
 }
 
 module bed_bracket(ht) {
@@ -46,13 +47,15 @@ module carriage(w=0,m=0) {
     mirror([0,0,m])	translate([0,0,-15.5]) rotate([0,0,0]) z_carriage(w);	
 }
 
-module bed_assembly(w= 0, bed_ht=10) {
+module bed_assembly(w= 0, bed_ht=10, show_bed=1) {
 	rotate([180,0,0]) {
 		translate([3.6,3.6,0]) bed_brace();
-		//bed(bed_ht);
+		if(show_bed) {
+			bed(bed_ht);
+		}
 
 		//translate([endx,endy,0]) rotate([0,90,90+45]) carriage(w);
-		//translate([-endx, -endy,0]) rotate([0,90,-45]) carriage(w);
+		translate([-endx, -endy,0]) rotate([0,90,-45]) carriage(w,1);
 		translate([-endx, endy,0]) rotate([0,90,180+45]) carriage(w, 0);
 		translate([endx, -endy,0]) rotate([0,90,45]) carriage(w, 1);
 	}

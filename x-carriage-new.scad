@@ -15,11 +15,11 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //Xcarriage(1);
 
 // render it for model
-//XcarriageModel();
+XcarriageModel();
 
 //extruder();
 
-Xcarriage_with_wheels();
+//Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion= 20;
