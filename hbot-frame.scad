@@ -7,6 +7,7 @@ use <y-carriage.scad>
 use <sg-spool.scad>
 use <idler-corner.scad>
 use <scissor-lift.scad>
+use <z-leadscrew-gantry.scad>
 
 extrusion= 20; // extrusion 2020
 sides= 500; // side length of cube in mm
@@ -87,8 +88,8 @@ translate([0,0,raised+10/2+20]) color("white") cube([520,520, 10], center= true)
 
 // Bed
 //bedh= 400; //top
-//bedh= 140; // bottom
-bedh= 232;
+//bedh= 138; // bottom
+bedh= 250;
 if(1) {
 	translate([0,0, raised+10+bedh]) bed_assembly(1,0,0);
 	//translate([50,50,raised+10]) rotate([0,0,45]) scissor_lift(bedh);
@@ -121,11 +122,14 @@ if(0) {
 // Z gantry, experimental cantilever
 zgantry_length= 500-60;
 zgantry_pos= -20;
-cantilever1_length= tan(45)*(sides/2-(zgantry_pos+20))-30;
+cantilever1_length= tan(45)*(sides/2-(zgantry_pos+20+5))+10;
 echo(str("cantilever1_length=", cantilever1_length));
+ght= raised+10+bedh;
 
 if(1) {
 	translate([sides/2-20, zgantry_pos, 30])  rotate([90,0,90]) hfs2040(zgantry_length);
-	translate([sides/2, zgantry_pos+20, raised+10+bedh])  rotate([0,0,90]) hfs2020(cantilever1_length);
-	translate([sides/2-cantilever1_length , zgantry_pos+30, raised+10+bedh])  rotate([0,90,0]) hbl45ts5();
+	translate([sides/2+22, zgantry_pos+20+5, ght])  rotate([0,0,90]) hfs2020(cantilever1_length);
+	translate([sides/2-cantilever1_length+40, zgantry_pos+35, ght])  rotate([0,90,0]) hbl45ts5();
+	translate([sides/2-20, zgantry_pos, ght]) rotate([0, 0, 90])   Zcarriage_with_wheels();
+	translate([230, -26, 50]) rotate([0, 90, -90])  actuator();
 }
