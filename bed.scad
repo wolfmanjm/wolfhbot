@@ -1,5 +1,5 @@
 use <misumi-parts-library.scad>;
-use <z-carriage-3wheel.scad>
+use <z-carriage-4wheel.scad>
 include <parameters.scad>
 
 mm= 25.4;
@@ -23,7 +23,7 @@ if(true) {
 	translate([-sep1,-sep1,-sides/2]) rotate([90,0,0]) hfs2020(sides);
 }
 
-bed_assembly(1, 76);
+bed_assembly(1, 5);
 
 module bed_brace() {
 	l= len1-40;
