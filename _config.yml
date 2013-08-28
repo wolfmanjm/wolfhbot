@@ -9,7 +9,7 @@ githubiverse:
     ## Metadata
     title: "WolfHBot a large build volume HBOT style 3D Printer"
     author: Jim Morris
-    license: GPL3
+    license: CC BY SA
     tags: [3dprinter, hbot, reprap]
 
     ## Github project parameters.
