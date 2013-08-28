@@ -13,9 +13,11 @@ wheel_groove_w= 0; // the width of the groove on the outside of the wheel
 bearingThickness= 5;
 bearingOD= 16;
 bearingID= 5;
+shim= 1;
 
 function v_wheel_dia()= od;
-function v_wheel_width()= thick;
+//function v_wheel_width()= thick;
+function v_wheel_width()= bearingThickness*2+shim; // includes bearing
 function v_wheel_id()= wheel_id;
 function v_wheel_indent()= wheel_d-0.1;
 
