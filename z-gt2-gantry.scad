@@ -4,7 +4,15 @@ use <misumi-parts-library.scad>
 use <dual-v-wheel.scad>
 use <myLibs.scad>
 use <motor-mount.scad>
-use <../MCAD/teardrop.scad>
+use <tensioner-gt2-F695zz.scad>
+
+// gt2 pulley
+gt2_length= 17.51;
+gt2_inner_length= 7.42;
+gt2_outer_dia= 17.85;
+gt2_inner_dia= 12.25;
+gt2_min_shaft_len= 9.14;
+gt2_max_shaft_len= 13.64;
 
 mm= 25.4;
 sides= 500;
@@ -14,7 +22,7 @@ zgantry_length= 500-60;
 
 // render it for model
 ZcarriageModel();
-//Zcarriage();
+//Zcarriage(1);
 //Zcarriage_with_wheels();
 
 //actuator();
@@ -33,7 +41,7 @@ wheel_width= v_wheel_width();
 wheel_id= v_wheel_id();
 wheel_indent= v_wheel_indent();
 
-wheel_penetration=2.0; // the amount the v wheel fits in the slot
+wheel_penetration=1.77; // the amount the v wheel fits in the slot
 
 pillarht= 1; // the amount the bushing sticks out
 bushing_ht= 0.25*mm;
@@ -63,7 +71,7 @@ function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
 // how much higher top is to accomodate cantilever
 top_offset= [top,0,0];
 
-extrusion_clearance= 1.0; // clearance between the side of the extrusion and the carriage
+extrusion_clearance= 0.5; // clearance between the side of the extrusion and the carriage
 cutout= extrusion_height/2-wheel_z+extrusion_clearance; // the cutout for the extrusion
 
 module ZcarriageModel() {
@@ -76,13 +84,17 @@ module ZcarriageModel() {
 	// show what we are riding on
 	translate([0, 0, 0]) rotate([90,0,0]) hfs2040(zgantry_length);
 
-	// the motor and leadscrew
-	translate([-6, 0, 0]) rotate([0, 90, 180])  actuator();
+	// the motor
+	translate([32+30, 0, 0]) rotate([0, 0, 0])  actuator();
+
+	//idler
+	translate([10, 10, zgantry_length-20]) rotate([0, 0, 90]) tensioner_695();
+
 }
 
 module Zcarriage_with_wheels() {
 	rotate([0,90,0]) translate([length/2+10,-wheel_separation/2,wheel_z]) {
-		rotate([0, 180, 0]) Zcarriage();
+		Zcarriage(0);
 
 		// show W Wheels
 		for(p=wheelpos)
@@ -95,31 +107,31 @@ module wheel_pillar(){
 }
 
 module base() {
+	co= 50;
 	r= rounding/2;
-	difference() {
-		translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
-			translate(wheelpos[0]) circle(r= r);
-			translate(wheelpos[1]+top_offset) circle(r= r);
-			translate(wheelpos[2]) circle(r= r);
-			translate(wheelpos[3]+top_offset) circle(r= r);
-		}
-		translate([0, wheel_separation/2, -thickness/2]) rotate([0, 0, 0])  cylinder(r=30, h=thickness+2, center=true);
+	translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
+		translate(wheelpos[0]) circle(r= r);
+		translate(wheelpos[1]+top_offset) circle(r= r);
+		translate(wheelpos[2]) circle(r= r);
+		translate(wheelpos[3]+top_offset) circle(r= r);
 	}
 }
 
-module Zcarriage() {
-	difference() {
-		union() {
-			base();
-			// flanges to attach leadnut to
-			translate([0, -thickness/2, 40/2-0.1])  cube(size=[40, thickness/2, 40], center=true);
-			translate([0, wheel_separation+thickness/2, 40/2-0.1])  cube(size=[40, thickness/2, 40], center=true);
+module Zcarriage(print=1) {
+	rotate([0,180,0]) {
+		if(print == 1) {
+			union() {
+				Zcarriage_main(1);
+			}
+		}else{
+			Zcarriage_main(0);
 		}
+	}
+}
 
-		// holes for flanges
-		for(y= [0, wheel_separation+thickness/2+5]) for(p= [[10, y, 40-10], [-10, y, 40-10], [10, y, 40-30], [-10, y, 40-30]]) {
-			translate(p) rotate([90, 0, 0]) hole(5, 10);
-		}
+module Zcarriage_main(print=1) {
+	difference() {
+		base();
 
 		for(p=wheelpos) {
 			// bushing holes
@@ -128,11 +140,13 @@ module Zcarriage() {
 			translate(p + [0,0,-50/2]) hole(5,50);
 		}
 
-		for(p= [wheelpos[2], wheelpos[3]]) {
-			// slot for adjustable wheel
-		   translate(p + [0,0,-50/2]) rotate([0,0,90]) slot(5,12,50);
-			// slot for bushing
-		   translate(p + [0,0,-(bushing_ht-pillarht)]) rotate([0,0,90]) slot(bushing_dia,15,bushing_ht);
+		if(print == 1) {
+			for(p= [wheelpos[2], wheelpos[3]]) {
+				// slot for adjustable wheel
+			   translate(p + [0,0,-50/2]) rotate([0,0,90]) slot(5,12,50);
+				// slot for bushing
+			   translate(p + [0,0,-(bushing_ht-pillarht)]) rotate([0,0,90]) slot(bushing_dia,15,bushing_ht);
+			}
 		}
 
 		// grub screw at bottom for adjusting tightness of bottom wheels
@@ -143,7 +157,7 @@ module Zcarriage() {
 		}
 
 		// extrusion cutout
-		translate([top_offset[0]/2,  wheel_separation/2, -cutout/2]) cube(size=[wheel_distance+wheel_diameter+top_offset[0], extrusion_width+4, cutout+0.2], center=true);
+		translate([top_offset[0]/2,  wheel_separation/2, -cutout/2]) cube(size=[wheel_distance+wheel_diameter+top_offset[0], extrusion_width+1, cutout+0.2], center=true);
 
 		// bolts for cantilever
 		#translate([length/2+10, 0, -30/2]) hole(5, 25);
@@ -160,13 +174,16 @@ module z_gantry() {
 	translate([sides/2, zgantry_pos+20, raised+10+bedh])  rotate([0,0,90]) hfs2020(cantilever1_length);
 }
 
-module leadscrew() {
-	%rotate([0,-90,0]) cylinder(r=0.5*mm/2, h= 12*mm);
-}
-
 module actuator() {
 	rotate([0,0,0]) {
-		translate([-60,0,33]) leadscrew();
-		translate([-40,-28,8]) rotate([90,0,90]) motorPlate();
+		//translate([-60,0,33]) leadscrew();
+		translate([0,-28,0]) rotate([90,0,90]) motorPlate();
+		translate([-10, 0, 22]) rotate([0, -90, 0])  color("red") gt2_pulley();
 	}
+}
+
+module gt2_pulley() {
+	cylinder(r=gt2_inner_dia/2, h=gt2_length, center=true);
+	translate([0, 0, gt2_length/2]) cylinder(r=gt2_outer_dia, h=1, center=true);
+	translate([0, 0, gt2_length/2-gt2_inner_length]) cylinder(r=gt2_outer_dia, h=1, center=true);
 }
