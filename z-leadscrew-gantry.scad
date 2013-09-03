@@ -13,8 +13,8 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 zgantry_length= 500-60;
 
 // render it for model
-ZcarriageModel();
-//Zcarriage();
+//ZcarriageModel();
+Zcarriage();
 //Zcarriage_with_wheels();
 
 //actuator();
@@ -35,9 +35,9 @@ wheel_indent= v_wheel_indent();
 
 wheel_penetration=2.0; // the amount the v wheel fits in the slot
 
-pillarht= 1; // the amount the bushing sticks out
 bushing_ht= 0.25*mm;
 bushing_dia= 8;
+pillarht= bushing_ht-1; // 1; // the amount the bushing sticks out
 
 rounding= 22;
 
@@ -65,6 +65,7 @@ top_offset= [top,0,0];
 
 extrusion_clearance= 1.0; // clearance between the side of the extrusion and the carriage
 cutout= extrusion_height/2-wheel_z+extrusion_clearance; // the cutout for the extrusion
+echo(str("cutout= ", cutout));
 
 module ZcarriageModel() {
 	cht= 200;
@@ -112,13 +113,14 @@ module Zcarriage() {
 		union() {
 			base();
 			// flanges to attach leadnut to
-			translate([0, -thickness/2, 40/2-0.1])  cube(size=[40, thickness/2, 40], center=true);
-			translate([0, wheel_separation+thickness/2, 40/2-0.1])  cube(size=[40, thickness/2, 40], center=true);
+			translate([0, -thickness/2, 40/2-0.1])  cube(size=[40, thickness, 40], center=true);
+			translate([0, wheel_separation+thickness/2, 40/2-0.1])  cube(size=[40, thickness, 40], center=true);
+
 		}
 
 		// holes for flanges
-		for(y= [0, wheel_separation+thickness/2+5]) for(p= [[10, y, 40-10], [-10, y, 40-10], [10, y, 40-30], [-10, y, 40-30]]) {
-			translate(p) rotate([90, 0, 0]) hole(5, 10);
+		for(y= [1, wheel_separation+thickness/2+6]) for(p= [[10, y, 40-10], [-10, y, 40-10], [10, y, 40-30], [-10, y, 40-30]]) {
+			translate(p) rotate([90, 0, 0]) hole(5, thickness+2);
 		}
 
 		for(p=wheelpos) {
