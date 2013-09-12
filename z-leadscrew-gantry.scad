@@ -5,6 +5,7 @@ use <dual-v-wheel.scad>
 use <myLibs.scad>
 use <motor-mount.scad>
 use <../MCAD/teardrop.scad>
+use <leadscrew-bearing-block.scad>
 
 mm= 25.4;
 sides= 500;
@@ -13,8 +14,8 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 zgantry_length= 500-60;
 
 // render it for model
-//ZcarriageModel();
-Zcarriage();
+ZcarriageModel();
+//Zcarriage();
 //Zcarriage_with_wheels();
 
 //actuator();
@@ -78,7 +79,7 @@ module ZcarriageModel() {
 	translate([0, 0, 0]) rotate([90,0,0]) hfs2040(zgantry_length);
 
 	// the motor and leadscrew
-	translate([-6, 0, 0]) rotate([0, 90, 180])  actuator();
+	translate([0, 0, 0]) rotate([0, 90, 180])  actuator();
 }
 
 module Zcarriage_with_wheels() {
@@ -167,8 +168,12 @@ module leadscrew() {
 }
 
 module actuator() {
+	mt= 5; // thickness of motor plate
 	rotate([0,0,0]) {
-		translate([-60,0,33]) leadscrew();
-		translate([-40,-28,8]) rotate([90,0,90]) motorPlate();
+		translate([-60,0,10+motorMountHeight()/2+mt]) leadscrew();
+		translate([-40,0,10]) rotate([90,0,90]) motorPlate(mt,mt);
+		// bearing block
+		translate([-70, 0, 10]) rotate([0, 0, -90]) pillow(motorMountHeight()/2+mt);
 	}
+	echo(str("Bearing block ht=", motorMountHeight()/2+mt));
 }

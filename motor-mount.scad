@@ -1,9 +1,12 @@
 use <../MCAD/motors.scad>
-use <../myLibs.scad>
+use <myLibs.scad>
 use <../MCAD/triangles.scad>
 
 w= 54;
 h= 50;
+
+function motorMountWidth() = w;
+function motorMountHeight() = h;
 
 module motorAttachment(thickness=4) {
 	translate([0,h,thickness]) rotate([180,0,0]) difference() {
@@ -15,12 +18,12 @@ module motorAttachment(thickness=4) {
 module attachmentPlate(thickness=4) {
 	difference() {
 		cube([w,40,thickness]);
-		
+
 		// attachment holes
-		#translate([(w/2)-10, 10, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);		
-		#translate([(w/2)-10, 30, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);			
-		#translate([(w/2)+10, 10, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);			
-		#translate([(w/2)+10, 30, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);			
+		#translate([(w/2)-10, 10, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);
+		#translate([(w/2)-10, 30, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);
+		#translate([(w/2)+10, 10, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);
+		#translate([(w/2)+10, 30, 0]) rotate([0,0,90]) slot(d= 5, l=10, ht=thickness);
 	}
 }
 
@@ -29,7 +32,7 @@ module buttress(thickness=4) {
 }
 
 module motorPlate(thickness=4, buttressThickness=4) {
-	union() {
+	translate([-w/2, thickness, 0]) union() {
 		motorAttachment(thickness);
 		translate([0,0.1,0]) rotate([90,0,0]) attachmentPlate(thickness);
 		translate([buttressThickness,-0.1,0]) rotate([0,-90,0]) buttress(buttressThickness);
