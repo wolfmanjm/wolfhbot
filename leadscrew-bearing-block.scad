@@ -1,7 +1,7 @@
 use <myLibs.scad>
 use <../MCAD/triangles.scad>
 
-width= 50;
+width= 40;
 height= 35;
 depth= 30;
 to_center= 20;
@@ -35,7 +35,7 @@ module holes(ext=0) {
 	for(x= [10,-10]) {
 		translate([x,-thick/2,-25]) hole(5, 50);
 		//counter sink
-		translate([x,-thick/2,-ext+7]) hole(10, thick+ext);
+		#translate([x,-thick/2,-ext+7]) hole(10, thick+ext+20);
 	}
 }
 
