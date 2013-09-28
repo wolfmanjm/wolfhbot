@@ -18,6 +18,8 @@ Currently using line driven, and just XY moves...
 * [second movement](http://youtu.be/p5AFRTE33c4)
 * [Drawing big circle](http://youtu.be/9L7iuisqjXY)
 * [Insane speed circle](http://youtu.be/wYBltiACMb0)
+* [New Z actuator](http://flic.kr/p/gcBkjw)
+* [New Z actuator](http://flic.kr/p/gcBGvX)
 
 For historical purposes...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
@@ -37,11 +39,20 @@ the top or bottom of the bearing.
 The scissor lift idea was nice but the prototype showed that a Nema17
 did not have enough torque to lift the bed.  I think the bottom of the
 scissor lift needs to lift 4 times the weight so any pressure on the
-top caused the motor to skip. So onto the next idea which is just a
-single stage scissor with longer arms. It may still require more
-torque than the stepper can provide, but the options are to gear the
-steppers down to get more torque, or use a totally different mechanism
-for lifting the Z bed.
+top caused the motor to skip.
+
+The new Z actuator is a length of 500mm of 2040 VSlot, with a printed
+carriage and v wheels. Driven by a McMaster ACME 1/2" leadscrew with
+10TPI, Bearing blocks using 608 at top and bottom and a Nema17 with
+5mm/0.25" flexible coupling. The bottom bearing block isolates the
+flexible coupling from taking any weight and compressing. As the 1/2"
+leadscrew is pretty big it has no wobble as far as I can tell and
+having bearings top and bottom seems to be very stable. I also used a
+printed Leadscrew nut printed in PLA and it seems pretty snug and
+smooth.
+
+So this adds several printed parts... The Carriage, a bracket to hold
+the leadscrew nut, and bearing blocks.
 
 BOM
 ---
