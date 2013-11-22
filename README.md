@@ -3,14 +3,15 @@ Wolf HBot
 
 _NOTE_ This is still in a process of design and is not currently printing, so anything can change.
 
-A large build volume 3d printer based on the HBot (CoreXY) concept.
+A large build volume 3d printer based on the CoreXY concept.
 
 The plans are use 2020 Misumi extrusions for most of the frame.
 
 * The XY carriages will run on either 2020 vslot or 2020 and openrail from openbuilds.com as W Wheels are no longer available
 * The drive currently uses 65lb Spectra fishing line and machined spools, but may try to switch to GT2 belts instead
 * build volume is around 12 inches cubed (300x300x300 mm)
-* The Z lift is in a state of redesign at the moment, probably will use vslot and mini-vslot carriages on the verticals, or retrofit with openrail and printed carriages.
+* The Z lift is in a state of redesign at the moment, currently the Z actuator is 2040 vslot
+  and a printed carriage. It runs on an ACME 1/2" leadscrew with 10TPI and a printed PLA Nut
 
 Currently using line driven, and just XY moves...
 
@@ -25,15 +26,16 @@ For historical purposes...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
-The four idlers are grooved 4mm bearings that bolt directly to the
-extrusion on the Xgantry. These could be 5mm bearings if you remember
-to put the nuts in the grooves before assembly, I used 4 post
-assembly nuts which take 4mm screws.
+Recently re wired to be Corexy, the six idlers are grooved 5mm
+bearings that bolt directly to the extrusion on the Xgantry.  The
+bearings at the ends are stacked on top of each other with a washer in
+between, this allows the cables to run on to of each other and no
+cross over is needed.
 
-The two end idlers are grooved 5mm bearings that are screwed directly
+The four end idlers are grooved 5mm bearings that are screwed directly
 into the tapped center of the vertical extrusion. This provides very
 solid idlers than can take the tension of the spectra when it is
-tight.  The grooves are necessary otherwsie the spectra just runs off
+tight.  The grooves are necessary otherwise the spectra just runs off
 the top or bottom of the bearing.
 
 The scissor lift idea was nice but the prototype showed that a Nema17
