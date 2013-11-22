@@ -27,8 +27,11 @@ For historical purposes...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
-Recently re wired to be Corexy, the six idlers are grooved 5mm
-bearings that bolt directly to the extrusion on the Xgantry.  
+Recently re wired to be Corexy rathe rthan HBot.
+
+The four idlers on the XGantry are grooved 5mm bearings that bolt
+directly to the extrusion slots. One of the X carriage bearings is
+raised 10mm to keep the lines parallel.
 
 The four end idlers are grooved 5mm bearings that are screwed directly
 into the tapped center of the vertical extrusion. This provides very
@@ -38,7 +41,7 @@ the top or bottom of the bearing.
 These bearings are stacked on top of each other with a
 washer in between, this allows the cables to run on top of each other
 and no cross over is needed.
-One of the X carriage bearings is raised 10mm to keep the lines parallel.
+
 
 The scissor lift idea was nice but the prototype showed that a Nema17
 did not have enough torque to lift the bed.  I think the bottom of the
