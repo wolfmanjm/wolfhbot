@@ -164,7 +164,7 @@ module z_gantry() {
 }
 
 module leadscrew() {
-	%rotate([0,-90,0]) cylinder(r=0.5*mm/2, h= 12*mm);
+	%rotate([0,-90,0]) cylinder(r=0.5*mm/2, h= 13*mm);
 }
 
 module actuator() {
@@ -172,8 +172,10 @@ module actuator() {
 	rotate([0,0,0]) {
 		translate([-60,0,10+motorMountHeight()/2+mt]) leadscrew();
 		translate([-40,0,10]) rotate([90,0,90]) motorPlate(mt,mt);
-		// bearing block
+		// bearing block bottom
 		translate([-70, 0, 10]) rotate([0, 0, -90]) pillow(motorMountHeight()/2+mt);
+		// bearing block top
+		translate([-380, 0, 10]) rotate([0, 0, 90]) pillow(motorMountHeight()/2+mt);
 	}
 	echo(str("Bearing block ht=", motorMountHeight()/2+mt));
 }

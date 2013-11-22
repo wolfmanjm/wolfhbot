@@ -6,7 +6,7 @@ use <x-carriage-new.scad>
 use <y-carriage.scad>
 use <sg-spool.scad>
 use <idler-corner.scad>
-use <scissor-lift.scad>
+//use <scissor-lift.scad>
 use <z-leadscrew-gantry.scad>
 
 extrusion= 20; // extrusion 2020
@@ -82,7 +82,7 @@ translate([bsep1, bsep, bheight]) rotate([0,0,180]) hblfsn5();
 translate([-bsep1, bsep, bheight]) rotate([0,0,180]) hblfsn5();
 
 // Base
-translate([0,0,raised+10/2+20]) color("white") cube([520,520, 10], center= true);
+//translate([0,0,raised+10/2+20]) color("white") cube([520,520, 10], center= true);
 
 ///////////////////// end frame ///////////////////////
 
@@ -91,7 +91,7 @@ translate([0,0,raised+10/2+20]) color("white") cube([520,520, 10], center= true)
 //bedh= 138; // bottom
 bedh= 250;
 if(1) {
-	translate([0,0, raised+10+bedh]) bed_assembly(1,0,0);
+	rotate([0, 0, 90])  translate([0,0, raised+10+bedh]) bed_assembly(1,0,0);
 	//translate([50,50,raised+10]) rotate([0,0,45]) scissor_lift(bedh);
 }
 
@@ -105,11 +105,11 @@ if(0) {
 // Motors
 mh= height-10;
 if(0) {
-	translate([-sides/2-extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(0);
-	translate([sides/2+extrusion,sides/2+extrusion,mh+10]) rotate([180,0,90]) motor_bracket(1);
-	
-	translate([sides/2+extrusion-8,sides/2+extrusion+32,mh+10]) spool();
-	translate([-(sides/2+extrusion-8),sides/2+extrusion+32,mh+10]) spool();
+	translate([sides/2+extrusion,-sides/2-extrusion,mh+10]) rotate([180,0,0]) motor_bracket(1);
+	translate([sides/2+extrusion,sides/2+extrusion,mh+10]) rotate([180,0,0]) motor_bracket(0);
+
+	translate([sides/2+extrusion+32,sides/2+extrusion-8,mh+10]) spool();
+	translate([(sides/2+extrusion+32),-sides/2-extrusion+8,mh+10]) spool();
 }
 
 ih= height+20;
@@ -119,17 +119,17 @@ if(0) {
 	translate([sides/2+extrusion/2,-sides/2-extrusion/2,ih]) rotate([180,0,180]) idler_mount();
 }
 
-// Z gantry, experimental cantilever
+// Z gantry, cantilever
 zgantry_length= 500-60;
-zgantry_pos= -20;
-cantilever1_length= tan(45)*(sides/2-(zgantry_pos+20+5))+10;
+zgantry_pos= -160;
+cantilever1_length= 140; // tan(45)*(sides/2-(zgantry_pos+20+5))+10;
 echo(str("cantilever1_length=", cantilever1_length));
 ght= raised+10+bedh;
 
 if(1) {
-	translate([sides/2-20, zgantry_pos, 30])  rotate([90,0,90]) hfs2040(zgantry_length);
-	translate([sides/2+22, zgantry_pos+20+5, ght])  rotate([0,0,90]) hfs2020(cantilever1_length);
-	translate([sides/2-cantilever1_length+40, zgantry_pos+35, ght])  rotate([0,90,0]) hbl45ts5();
-	translate([sides/2-20, zgantry_pos, ght]) rotate([0, 0, 90])   Zcarriage_with_wheels();
-	translate([230, -26, 50]) rotate([0, 90, -90])  actuator();
+	translate([sides/2+60, zgantry_pos, 30])  rotate([90,0,-90]) hfs2040(zgantry_length);
+	translate([sides/2-40, zgantry_pos-20-10, ght])  rotate([0,0,-90]) hfs2020(cantilever1_length);
+	//translate([sides/2-cantilever1_length+40, zgantry_pos+35, ght])  rotate([0,90,0]) hbl45ts5();
+	translate([sides/2+60, zgantry_pos, ght]) rotate([0, 0, -90])   Zcarriage_with_wheels();
+	translate([230+60, zgantry_pos, 50]) rotate([0, 90, 90])  actuator();
 }

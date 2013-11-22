@@ -44,10 +44,10 @@ module bed(ht=10) {
 }
 
 module carriage(w=0,m=0) {
-    mirror([0,0,m])	translate([0,0,-15.5]) rotate([0,0,0]) z_carriage(w);	
+    mirror([0,0,m])	translate([0,0,-15.5]) rotate([0,0,0]) z_carriage(w);
 }
 
-module bed_assembly(w= 0, bed_ht=10, show_bed=1) {
+module bed_assembly(w= 0, bed_ht=10, show_bed=0) {
 	rotate([180,0,0]) {
 		translate([3.6,3.6,0]) bed_brace();
 		if(show_bed) {
@@ -56,8 +56,8 @@ module bed_assembly(w= 0, bed_ht=10, show_bed=1) {
 
 		//translate([endx,endy,0]) rotate([0,90,90+45]) carriage(w);
 		translate([-endx, -endy,0]) rotate([0,90,-45]) carriage(w,1);
-		translate([-endx, endy,0]) rotate([0,90,180+45]) carriage(w, 0);
+		//translate([-endx, endy,0]) rotate([0,90,180+45]) carriage(w, 0);
 		translate([endx, -endy,0]) rotate([0,90,45]) carriage(w, 1);
 	}
-	
+
 }
