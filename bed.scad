@@ -1,5 +1,7 @@
 use <misumi-parts-library.scad>;
 use <z-carriage-4wheel.scad>
+use <bedleveller.scad>
+
 include <parameters.scad>
 
 mm= 25.4;
@@ -24,6 +26,8 @@ if(true) {
 }
 
 bed_assembly(1, 5);
+
+translate([0, 0, 10]) rotate([0, 0, 135])  bed_leveller();
 
 module bed_brace() {
 	l= len1-40;
