@@ -1,9 +1,9 @@
 use <myLibs.scad>
 
-w= 65.85;
+w= 60.0;
 h= 60;
 l= 40.00;
-thick= 4;
+thick= 8;
 holder_thick= 10;
 
 hole_sep= 20;

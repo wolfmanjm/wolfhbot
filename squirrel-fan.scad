@@ -17,6 +17,8 @@ flangepos= [[d/2*sin(55),-d/2*cos(55),-t/2], [-d/2*sin(45),d/2*cos(45),-t/2]];
 fan();
 //flange();
 
+function get_duct() = [ductw, ductl, 0];
+
 module flange() {
 	r= flangew/2;
 	translate([0,0,0]) difference() {
@@ -39,8 +41,8 @@ module fan() {
 		translate([0,0,-t/2]) cylinder(r=dia/2, h= t);
 		bigger_radius();
 		translate([0,ductx,-t/2]) cube([dia/2+ducto,ductl,t]);
-		translate(flangepos[0]) rotate([0,0,225]) flange(); 
-		translate(flangepos[1]) rotate([0,0,45]) flange(); 
+		translate(flangepos[0]) rotate([0,0,225]) flange();
+		translate(flangepos[1]) rotate([0,0,45]) flange();
 	}
 
 }

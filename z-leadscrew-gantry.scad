@@ -14,8 +14,8 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 zgantry_length= 500-60;
 
 // render it for model
-ZcarriageModel();
-//Zcarriage();
+//ZcarriageModel();
+Zcarriage();
 //Zcarriage_with_wheels();
 
 //actuator();
@@ -105,17 +105,19 @@ module base() {
 			translate(wheelpos[2]) circle(r= r);
 			translate(wheelpos[3]+top_offset) circle(r= r);
 		}
-		translate([0, wheel_separation/2, -thickness/2]) rotate([0, 0, 0])  cylinder(r=30, h=thickness+2, center=true);
+		translate([0, wheel_separation/2, -thickness/2]) cylinder(r=22, h=thickness+2, center=true);
 	}
 }
 
 module Zcarriage() {
+	flange_separation= 60.0;
+	flange_thickness= 10;
 	difference() {
 		union() {
 			base();
 			// flanges to attach leadnut to
-			translate([0, -thickness/2, 40/2-0.1])  cube(size=[40, thickness, 40], center=true);
-			translate([0, wheel_separation+thickness/2, 40/2-0.1])  cube(size=[40, thickness, 40], center=true);
+			translate([0, wheel_separation/2-flange_separation/2-flange_thickness/2, 40/2-0.1])  cube(size=[40, flange_thickness, 40], center=true);
+			translate([0, wheel_separation/2+flange_separation/2+flange_thickness/2, 40/2-0.1])  cube(size=[40, flange_thickness, 40], center=true);
 
 		}
 
