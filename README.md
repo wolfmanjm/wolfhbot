@@ -27,7 +27,8 @@ For historical purposes...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
-Recently re wired to be Corexy rathe rthan HBot.
+Recently re wired to be Corexy rather than HBot. Tis seems to redice
+racking of the X Gantry.
 
 The four idlers on the XGantry are grooved 5mm bearings that bolt
 directly to the extrusion slots. One of the X carriage bearings is
@@ -58,8 +59,37 @@ having bearings top and bottom seems to be very stable. I also used a
 printed Leadscrew nut printed in PLA and it seems pretty snug and
 smooth.
 
+There is a length of 2040 that spamce from teh Z actuator to the other
+side of the framw where another 500mm length of 2040 VSlot has a vslot
+mini carriage whicj is bolted to the end of the 2040 beam. Halfway
+along this beam is a short piece of 2020 perpendicular to it, this
+provides the third attachment point for the bed.
+
+The most important part of this design is the 
+[moving knot](http://cockrum.net/cnc_mechanical.html), which is attached to
+the top and bottom and runs over 4 v groove bearings on the cross
+beam, This keep the beam level while allowing a single actuator on one
+end to move it up and down. This is the [far end](http://flic.kr/p/i67Sim), 
+and here is a view of the [whole assembly](http://flic.kr/p/i67Es7).
+
+The bed is attached to the cross beam at three places to provide three
+point bed levelling.  I use a scheme where a 4mm stud is screwed into
+the tslots, and a 25mm length of aluminum rod, tapped to 4mm is
+screwed onto that, this can be turned to move up and down the stud. At
+the top of the aluminum is a cut out that the glass bed fits. Next to
+this, and also bolted into the tslot, is an M4 bolt with a conical
+spring bolted to the top, this pushes the glass at the three
+attachment points up into the slots on the aluminum rounds. This keeps
+the glass flat without deforming it, and allows it to be leveled at
+three points by turning the aluminum rounds. Some jam nuts are used
+to screw up to the aluminum rounds to stop them unscrewing once
+levelled.
+
 So this adds several printed parts... The Carriage, a bracket to hold
-the leadscrew nut, and bearing blocks.
+the leadscrew nut, and bearing blocks. Also some lathe work to cut a
+thread into the center of some 1/2" aluminum round, and lathe a groove
+at the top that the glass can slot into. (If the bed is not heated
+this could be a printed part).
 
 BOM
 ---
