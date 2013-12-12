@@ -21,6 +21,7 @@ Currently using line driven, and just XY moves...
 * [Insane speed circle](http://youtu.be/wYBltiACMb0)
 * [New Z actuator](http://flic.kr/p/gcBkjw)
 * [New Z actuator](http://flic.kr/p/gcBGvX)
+* [Printing vase](http://youtu.be/nGm1CWDJkY0)
 
 For historical purposes...
 
