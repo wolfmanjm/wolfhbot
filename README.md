@@ -28,7 +28,7 @@ For historical purposes...
 * [animation of the scissor lift concept](http://blog.wolfman.com/files/scissor-lift.gif)
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
-Recently re wired to be Corexy rather than HBot. Tis seems to redice
+Recently re wired to be Corexy rather than HBot. This seems to reduce
 racking of the X Gantry.
 
 The four idlers on the XGantry are grooved 5mm bearings that bolt
@@ -58,18 +58,19 @@ flexible coupling from taking any weight and compressing. As the 1/2"
 leadscrew is pretty big it has no wobble as far as I can tell and
 having bearings top and bottom seems to be very stable. I also used a
 printed Leadscrew nut printed in PLA and it seems pretty snug and
-smooth.
+smooth. I also used a half height leadscrew nut and spring to implement
+antibacklash which appears to be necessary.
 
-There is a length of 2040 that spamce from teh Z actuator to the other
-side of the framw where another 500mm length of 2040 VSlot has a vslot
-mini carriage whicj is bolted to the end of the 2040 beam. Halfway
+There is a length of 2040 that spans from the Z actuator to the other
+side of the frame where another 500mm length of 2040 VSlot has a vslot
+mini carriage which is bolted to the end of the 2040 beam. Halfway
 along this beam is a short piece of 2020 perpendicular to it, this
 provides the third attachment point for the bed.
 
 The most important part of this design is the 
 [moving knot](http://cockrum.net/cnc_mechanical.html), which is attached to
 the top and bottom and runs over 4 v groove bearings on the cross
-beam, This keep the beam level while allowing a single actuator on one
+beam, This keeps the beam level while allowing a single actuator on one
 end to move it up and down. This is the [far end](http://flic.kr/p/i67Sim), 
 and here is a view of the [whole assembly](http://flic.kr/p/i67Es7).
 
@@ -101,11 +102,10 @@ All Aluminum parts are from Misumi with Misumi part numbers
 * 2x  550mm HFS2020 - X Gantry sides
 * 2x  85mm HFX2020 - X Gantry sides (Note it's cheaper to buy 2x 1000mm of 2020 and cut these yourself)
 * 4x  HBLFSNF5 brackets - X Gantry
-* 1x  678mm HFS2020 - Z Bed
-* 2x  329mm HFS2020 - Z Bed
-* 17x W Wheels with [bearings](http://3d.grabercars.com/?product=universal-w-delrin-roller-with-bearing)
+* 1x  500mm HFS2040 - Z Bed
+* 1x  250mm HFS2020 - Z Bed
 * 2x  Delrin Spools for [Spectra](http://3d.grabercars.com/?product=filament-drive-reel-grooved-delrin-18mm-o-d-for-kossel) or any of the spools he sells at http://3d.grabercars.com/?post_type=product
-* 6x  625VV grooved bearings - for idlers from [ebay](http://www.ebay.com/itm/10-5-16-5mm-625VV-5mm-V-Groove-Guide-Pulley-Sealed-Rail-Ball-Bearing-5-16-5-/170998886188?pt=BI_Heavy_Equipment_Parts&hash=item27d053ef2c)
+* 8x  625VV grooved bearings - for idlers from [ebay](http://www.ebay.com/itm/10-5-16-5mm-625VV-5mm-V-Groove-Guide-Pulley-Sealed-Rail-Ball-Bearing-5-16-5-/170998886188?pt=BI_Heavy_Equipment_Parts&hash=item27d053ef2c)
 * several yards of 65lb Spectra fishing line (Powerpro)
 * 2x ball swivels from a fishing store
 * 2x Nema 17 Stepper motors (preferably Kysan or equivalent)
@@ -118,16 +118,18 @@ Printed Parts
 * 1x motor-bracket-r.stl
 * 2x y-carriage.stl
 * 1x x-carriage.stl
-* 4x z-carriage.stl
 
-
-TODO
-----
-Z bed lifting mechanics in design, not happy with it yet
-
+Z bed
+-----
 * 1x Nema 17
-* 1x lead screw (maybe)
-* TBD
+* 1x lead screw (McMaster 1/2" 10TPI ACME)
+* Two printed Leadscrew nuts and a collar for the anti backlash
+* 5/8" diameter spring for the anti backlash
+* 2x 500mm 2040 VSlot
+* 4x VWheels
+* 1x printed Z carriage, plus leadnut holder
+* 1x mini vslot carriage and mini wheels
+* 4x v groove bearings, 2x turnbuckles, two lengths of Spectra fishing line for the moving knot
 
 License
 -------
