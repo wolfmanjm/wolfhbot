@@ -35,7 +35,7 @@ For historical purposes...
 * [Scissor Lift prototype in action](http://youtu.be/5y0PBw3Y6yg)
 
 Recently re wired to be Corexy rather than HBot. This seems to reduce
-racking of the X Gantry.
+racking of the X Gantry. [See](http://joshuavasquez.com/docs/jVasquez/Projects/coreXY.html)
 
 Spectra Drive
 --------------
@@ -55,7 +55,7 @@ and no cross over is needed.
 GT2 Belt Drive
 --------------
 The two end idlers are 2x flanged bearings back to back, and another pair separated with a washer above it,
-Then two of the idelrs on the X Gantry are raised to keep the belt riding level.
+Then two of the idlers on the X Gantry are raised to keep the belt riding level.
 I avoid the cross over of the belts by running the two belts one above the other in parallel.
 
 
