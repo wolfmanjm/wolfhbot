@@ -4,7 +4,7 @@
 use <misumi-parts-library.scad>
 use <dual-v-wheel.scad>
 use <myLibs.scad>
-use <XGantry.scad>
+use <XGantry-60.scad>
 use <squirrel-fan.scad>
 
 mm= 25.4;
@@ -14,18 +14,18 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //extruder_mount();
 
 // display it for print == 1
-Xcarriage(1);
+//Xcarriage(1);
 
 // render it for model
-//XcarriageModel();
+XcarriageModel();
 
-//extruder();
+//extruder_shelf();
 
 //Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion= 20;
-extrusion_width= get_xgantry_width()+extrusion; // the side that the wheels run on
+extrusion_width= get_xgantry_width(); // the side that the wheels run on
 extrusion_height= 20;
 
 line_ht= 3.6; // height of line above extrusion
@@ -37,16 +37,18 @@ mountingplate_w= 25.6+5;
 mountingplate_l= 70+2;
 mountingplate_h= 5;
 
-
 wheel_diameter = v_wheel_dia();
 wheel_width= v_wheel_width();
 wheel_id= v_wheel_id();
 wheel_indent= v_wheel_indent();
 
-bearingThickness= 5;
-bearingOD= 15.6;
-bearingID= 4;
-bearingShaftCollar= 6;//???
+bearingFlangeThickness= 1;
+bearingThickness= 8- bearingFlangeThickness*2;
+bearingOD= 13;
+bearingID= 5;
+bearingFlangeDia= 15;
+belt_thick= 2; // 1.45
+belt_width= 6;
 
 wheel_penetration=0; // the amount the w wheel fits in the slot
 wheel_clearance= 0; // clearance between the side of the extrusion and the carriage
@@ -68,6 +70,9 @@ echo("wheel distance= ", wheel_distance);
 wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
+idler1ht= -wheel_z+1.5 + 2;
+idler2ht= idler1ht+bearingThickness+bearingFlangeThickness*2+1;
+
 wheelpos= [ [-wheel_distance/2, 0, 0], [wheel_distance/2, 0, 0], [-wheel_distance/2, wheel_separation, 0], [wheel_distance/2, wheel_separation, 0]];
 
 function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
@@ -81,14 +86,40 @@ module XcarriageModel() {
 	}
 
 	// show what we are riding on
-	translate([0, get_xgantry_width()/2+10+wheel_diameter/2,  -wheel_z-20]) {
+	translate([0, get_xgantry_width()/2+wheel_diameter/2, -wheel_z-20]) {
 		translate([0,0,-11.5]) Xgantry();
 		// bolt head
-		color("blue") translate([0,-get_xgantry_width()/2,22]) cylinder(r=10/2, h=2);
+		color("blue") translate([0,-get_xgantry_width()/2+10,22]) cylinder(r=10/2, h=2);
 	}
 
+	// extruder mount attachment
+	translate([wheel_distance/2, -wheel_diameter, -thickness]) rotate([0, 0, 90])  hfs2020(wheel_distance);
+
+	// extruder mount
+	translate([0, -55, -20])  extruder_shelf();
+
 	// show extruder and hotend
-	translate([0,wheel_separation/2,thickness/2]) rotate([0,0,0]) extruder();
+	translate([0,-65,-20]) rotate([0,0,0]) extruder();
+
+	// Idler bearings
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-10, idler1ht]) idler();
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2+10, idler2ht]) idler();
+
+	// belt
+	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2-10+bearingOD/2, idler1ht]) cube(size=[300, belt_thick, belt_width]);
+	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2+10-bearingOD/2- belt_thick, idler2ht]) cube(size=[300, belt_thick, belt_width]);
+
+}
+
+module idler() {
+	color("green") difference() {
+		union() {
+			cylinder(r=bearingOD/2, h=bearingThickness);
+			translate([0, 0, -bearingFlangeThickness]) cylinder(r=bearingFlangeDia/2, h=bearingFlangeThickness);
+			translate([0, 0, bearingThickness]) cylinder(r=bearingFlangeDia/2, h=bearingFlangeThickness);
+		}
+		translate([0, 0, -2])  cylinder(r=bearingID/2, h=bearingThickness+4);
+	}
 }
 
 module Xcarriage_with_wheels() {
@@ -112,7 +143,7 @@ module base() {
 	co= 50;
 	r= rounding/2;
 	translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
-		for(p= wheelpos) {
+		for(p= [wheelpos[0]-[0,wheel_diameter,0], wheelpos[1]-[0,wheel_diameter,0], wheelpos[2], wheelpos[3]]) {
 			translate(p) circle(r= r);
 		}
 	}
@@ -133,8 +164,10 @@ module Xcarriage(print=1) {
 }
 
 module Xcarriage_main(print=1) {
-	cable_y1= wheel_separation/2 - extrusion_width/2 + extrusion/2 + bearingOD/2;
-	cable_y2= wheel_separation/2 + extrusion_width/2 - extrusion/2 - bearingOD/2;
+	belt_d= 5;
+	belt_y1= get_xgantry_width()/2+wheel_diameter/2+10 - bearingOD/2 + belt_d/2;
+	belt_y2= get_xgantry_width()/2+wheel_diameter/2-10 + bearingOD/2 - belt_d/2;
+
 	difference() {
 		base();
 
@@ -144,11 +177,6 @@ module Xcarriage_main(print=1) {
 			// M5 holes for wheels
 			translate(p + [0,0,-50/2]) hole(5,50);
 		}
-
-		// negative mount for extruder
-		translate([0,wheel_separation/2,-thickness/2]) rotate([0,0,90]) extruder_mount();
-		// cutout for extruder mount
-		translate([0,wheel_separation/2,-10]) rotate([0,0,90]) mountingplate(4);
 
 		if(print == 1) {
 			for(p= [wheelpos[2], wheelpos[3]]) {
@@ -166,47 +194,61 @@ module Xcarriage_main(print=1) {
 			translate(p+ [0,14/2,0]) cube([5.46,3,thickness], center=true);
 		}
 
-		// termination for cables
-		for(y= [cable_y1, cable_y2]) for(m= [0,1]){
+		// termination for belts
+		for(y= [belt_y1, belt_y2]) for(m= [0,1]){
 			mirror([m,0,0]) {
-				translate([36,y,-1.5]) cube([32,10,6], center=true);
-				#translate([36-25/2+3,y,-20/2]) hole(3, 20);
+				#translate([40,y,-20]) hole(5, 30);
 			}
 		}
 
-		// cable attachment hole
-		translate([wheel_distance/2+5, wheel_separation/2, -5])  cylinder(r=0.25/2*mm, h=20, center=true);
-
-		// fan duct cut out
-		// translate([10, 10, -10-thickness+3]) rotate([0, 0, 30]) cube(size=get_duct()+[0,0,10], center=false);
-		translate([9, 19.5, -17]) rotate([20, 0, 30]) cube(size=get_duct()+[-1,5,14], center=false);
-		// squirrel fan
-		translate([20, 15, -35]) rotate([90, -23, 120])  fan();
-
+		// mount for cable holder
+		translate([0, wheel_separation/2, -5])  cylinder(r=0.25/2*mm, h=20, center=true);
 	}
 }
 
-module mountingplate(clearance=0) {
-	x= mountingplate_w+clearance;
-	y= mountingplate_l+clearance;
-	translate([-x/2, -y/2,0]) cube([x, y, mountingplate_h]);
+module extruder_shelf() {
+	// base of extruder mount
+	w= 30;
+	l= 30;
+	co= 50;
+	thickness= 5;
+	r= rounding/2;
+	difference() {
+		translate([0, 0, -thickness])  linear_extrude(height= thickness) hull() {
+			for(p= [[w, l, 0], [-w, l, 0], [-w, -l, 0], [w, -l, 0]]) {
+				translate(p) circle(r= r);
+			}
+		}
+
+		// negative mount for extruder
+		translate([0,-10,-thickness/2]) rotate([0,0,90]) extruder_mount(w);
+
+		// mounting holes
+		#translate([w, l, -10]) rotate([0, 0, 0]) hole(5, 20);
+		#translate([-w, l, -10]) rotate([0, 0, 0]) hole(5, 20);
+
+		// fan mount hole
+		#translate([-w+2, 15, -10]) rotate([0, 0, 90])  slot(4, 20, 20);
+
+	}
+	// squirrel fan
+	%translate([0,30,-15]) rotate([0, 0, -115])  fan();
 }
 
 // extruder and head
 module extruder() {
-	translate([0,0,0])rotate([0,0,90]) mountingplate();
-	translate([2,12,mountingplate_h+4.6]) rotate([90,0,0,0,0]) import("me_body_v5.2_3mm.stl");
+	//translate([0,0,0]) rotate([0,0,90]) mountingplate();
+	translate([22,-42,0]) rotate([0,0,0]) import("greg-wades-all.stl");
 	translate([0,0,9.2]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
 }
 
-module extruder_mount() {
+module extruder_mount(w) {
 	holes = 4;
-	w =  get_xgantry_width() - 20 - 1;
 	l= 60;
 	height = thickness+2;
 
 	translate([0,0,1]) difference() {
-		cube([w, l, height], center=true);
+		translate([-5, 0, 0])  cube([w+5, l, height], center=true);
 		difference() {
 			cube([w, l, height], center=true);
 			cylinder(r=20, h=height+1, center=true, $fn=6);

@@ -1,19 +1,22 @@
 Wolf HBot
 ============
 
-_NOTE_ This is still in a process of design and is not currently printing, so anything can change.
+_NOTE_ This is still a work in progess, it is currently printing quite well.
 
 A large build volume 3d printer based on the CoreXY concept.
 
 The plans are use 2020 Misumi extrusions for most of the frame.
 
 * The XY carriages will run on either 2020 vslot or 2020 and openrail from openbuilds.com as W Wheels are no longer available
-* The drive currently uses 65lb Spectra fishing line and machined spools, but may try to switch to GT2 belts instead
+* The drive originally used 65lb Spectra fishing line and machined spools
+* Now uses GT2 belts, in Corexy configuration with no cross over
 * build volume is around 12 inches cubed (300x300x300 mm)
-* The Z lift is in a state of redesign at the moment, currently the Z actuator is 2040 vslot
+* The Z lift has one Z actuator made of 2040 vslot
   and a printed carriage. It runs on an ACME 1/2" leadscrew with 10TPI and a printed PLA Nut
+  and uses a moving knot to keep the cantilever level
 
-Currently using line driven, and just XY moves...
+Pictures and Videos
+-------------------
 
 * [first movements](http://youtu.be/cA50g_V9wbQ)
 * [second movement](http://youtu.be/p5AFRTE33c4)
@@ -22,6 +25,9 @@ Currently using line driven, and just XY moves...
 * [New Z actuator](http://flic.kr/p/gcBkjw)
 * [New Z actuator](http://flic.kr/p/gcBGvX)
 * [Printing vase](http://youtu.be/nGm1CWDJkY0)
+* [Corexy Belt no cross over](http://flic.kr/p/iT5DkX)
+* [Corexy Belt no cross over](http://flic.kr/p/iT7Lpm)
+* [Corexy Belt no cross over](http://flic.kr/p/iT73UX)
 
 For historical purposes...
 
@@ -31,7 +37,9 @@ For historical purposes...
 Recently re wired to be Corexy rather than HBot. This seems to reduce
 racking of the X Gantry.
 
-The four idlers on the XGantry are grooved 5mm bearings that bolt
+Spectra Drive
+--------------
+For Spectra drive the four idlers on the XGantry are grooved 5mm bearings that bolt
 directly to the extrusion slots. One of the X carriage bearings is
 raised 10mm to keep the lines parallel.
 
@@ -44,6 +52,15 @@ These bearings are stacked on top of each other with a
 washer in between, this allows the cables to run on top of each other
 and no cross over is needed.
 
+GT2 Belt Drive
+--------------
+The two end idlers are 2x flanged bearings back to back, and another pair separated with a washer above it,
+Then two of the idelrs on the X Gantry are raised to keep the belt riding level.
+I avoid the cross over of the belts by running the two belts one above the other in parallel.
+
+
+Z Bed
+-----
 
 The scissor lift idea was nice but the prototype showed that a Nema17
 did not have enough torque to lift the bed.  I think the bottom of the

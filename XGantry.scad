@@ -10,16 +10,13 @@ height= sides-extrusion/2;
 bsep= sides/2;
 bsep1= sides/2+extrusion/2;
 bheight= sides-extrusion;
-Xgantry_width=65;
+Xgantry_width=40;
 
 carriage_ht= 22;
 carriage_width= 5;
 
 xgantry_length= sides+extrusion*2+carriage_width*2;
 echo("xgantry length= ", xgantry_length);
-sidelen= Xgantry_width+extrusion;
-echo("side length= ", sidelen);
-echo("gap= ", sidelen-extrusion*2);
 
 //%translate([0,0,-height-extrusion/2]) top();
 
@@ -49,25 +46,13 @@ module gantry(xpos=0) {
 }
 
 module Xgantry(xpos= 0) {
-	translate([xgantry_length/2,Xgantry_width/2,carriage_ht]) rotate([0,0,90]) hfs2020(xgantry_length);
-	translate([xgantry_length/2,-Xgantry_width/2,carriage_ht]) rotate([0,0,90]) hfs2020(xgantry_length);
-	translate([xgantry_length/2+extrusion/2,-sidelen/2,carriage_ht]) hfs2020(sidelen);
-	translate([-xgantry_length/2-extrusion/2,-sidelen/2,carriage_ht]) hfs2020(sidelen);
-	
-	//brackets
-	translate([xgantry_length/2,-Xgantry_width/2+10,carriage_ht+10]) rotate([0,90,90]) hblfsnf5();
-	translate([xgantry_length/2,Xgantry_width/2-10,carriage_ht-10]) rotate([0,-90,90]) hblfsnf5();
-	translate([-xgantry_length/2,-Xgantry_width/2+10,carriage_ht-10]) rotate([0,-90,-90]) hblfsnf5();
-	translate([-xgantry_length/2,Xgantry_width/2-10,carriage_ht+10]) rotate([0,90,-90]) hblfsnf5();
+	translate([xgantry_length/2,0,carriage_ht]) rotate([0,90,90]) hfs2040(xgantry_length);
 
 	color("black") {
-		translate([0, -get_xgantry_width()/2-10.8, carriage_ht+10]) openrail();
-		translate([0, get_xgantry_width()/2+10.8, carriage_ht+10]) rotate([0,0,180]) openrail();
+		translate([0, -get_xgantry_width()/2-1	, carriage_ht+10]) openrail();
+		translate([0, get_xgantry_width()/2+1, carriage_ht+10]) rotate([0,0,180]) openrail();
 	}
-  
 }
-
-
 
 module top() {
 	// top

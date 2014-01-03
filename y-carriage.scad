@@ -50,23 +50,23 @@ function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
 
 module YcarriageModel() {
 	Ycarriage(0);
-	
+
 	// show W Wheels
 	%translate([-wheel_distance/2, 0, wheel_z]) w_wheel();
 	%translate([wheel_distance/2, 0, wheel_z]) w_wheel();
 	%translate([0, wheel_separation, wheel_z]) w_wheel();
-	
+
 	// show 2020 beam we are riding on
 	%translate([200/2, wheel_separation/2, wheel_z]) rotate([0, 0, 90]) hfs2020(200);
-	
+
 	// Gantry
     %translate([0,get_xgantry_length()/2+10,-32-thickness]) rotate([0,0,90]) Xgantry(0);
 }
 
 module Ycarriage_with_wheels() {
-	rotate([0,180,0]) translate([0,-wheel_diameter/2,-wheel_z]) {	
+	rotate([0,180,0]) translate([0,-wheel_diameter/2,-wheel_z]) {
 		Ycarriage(0);
-	
+
 		// show W Wheels
 		for(p=wheelpos)
 			translate([p[0], p[1], wheel_z]) w_wheel();
@@ -133,7 +133,7 @@ module Ycarriage(print=1) {
 		translate([0,wheelpos[2][1]+pillardia/2+2,-thickness/2]) rotate([90,0,0]) hole(3,pillardia/2);
 		translate([0,wheelpos[2][1]+9/2+1,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=2.5);
 		#translate([0,wheelpos[2][1]+9/2+1,0]) cube([5.46,2.5,thickness], center=true);
-		
+
 	}
 }
 
