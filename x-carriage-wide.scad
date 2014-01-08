@@ -6,7 +6,6 @@ use <dual-v-wheel.scad>
 use <myLibs.scad>
 use <XGantry-wide.scad>
 use <squirrel-fan.scad>
-use <../MCAD/boxes.scad>
 
 mm= 25.4;
 
@@ -32,7 +31,9 @@ extrusion_height= 20;
 line_ht= 3.6; // height of line above extrusion
 
 // the thickness of the base
-thickness = 10;
+channel_ht= 6.75; // thickness of channel
+channel_depth= 10;
+thickness = channel_ht;
 
 mountingplate_w= 25.6+5;
 mountingplate_l= 70+2;
@@ -52,12 +53,16 @@ bearingFlangeDia= 15;
 belt_thick= 2; // 1.45
 belt_width= 6;
 
+belt_d= 5;
+belt_y1= get_xgantry_width()/2+wheel_diameter/2-22+bearingOD/2;
+belt_y2= get_xgantry_width()/2+wheel_diameter/2+42-bearingOD/2- belt_thick;
+
 wheel_penetration=0; // the amount the w wheel fits in the slot
 wheel_clearance= 0; // clearance between the side of the extrusion and the carriage
 
-pillarht= 1; // the amount the bushing sticks out
 bushing_ht= 0.25*mm;
 bushing_dia= 8;
+pillarht= thickness/2; // the amount the bushing sticks out
 
 rounding= 22;
 
@@ -66,7 +71,7 @@ wheel_separation= extrusion_width+wheel_diameter+clearance-wheel_penetration*2; 
 
 // calculate separation of top two wheels to make an equilateral triangle
 //wheel_distance= (wheel_separation/tan(60))*2; // distance from wheel center to center of top two wheels
-wheel_distance= 80;
+wheel_distance= 70;
 echo("wheel distance= ", wheel_distance);
 
 wheel_z= pillarht+wheel_width/2;
@@ -76,11 +81,11 @@ wheelpos= [ [-wheel_distance/2, 0, 0], [wheel_distance/2, 0, 0], [-wheel_distanc
 
 function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
 
-idler1ht= -wheel_z+1.5 + 2;
+idler1ht= -wheel_z+1.5 + 3;
 idler2ht= idler1ht+bearingThickness+bearingFlangeThickness*2+1;
 
 module XcarriageModel() {
-	Xcarriage(0);
+	rotate([0, 180, 0])  Xcarriage(0);
 
 	// show V Wheels
 	for(p= wheelpos) {
@@ -95,16 +100,17 @@ module XcarriageModel() {
 	}
 
 	// show extruder and hotend
-	translate([0,wheel_separation/2,thickness/2]) rotate([0,0,0]) extruder();
+	//translate([0,wheel_separation/2,3]) rotate([0,0,0]) extruder();
 
 	// Idler bearings
-	#translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-24, idler1ht]) idler();
-	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2+40, idler2ht]) idler();
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-22, idler1ht]) idler();
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2+42, idler2ht]) idler();
 
 	// belt
-	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2-24+bearingOD/2, idler1ht]) cube(size=[300, belt_thick, belt_width]);
-	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2+40-bearingOD/2- belt_thick, idler2ht]) cube(size=[300, belt_thick, belt_width]);
+	color("white") translate([0, belt_y1, idler1ht]) cube(size=[300, belt_thick, belt_width]);
+	color("white") translate([0, belt_y2, idler2ht]) cube(size=[300, belt_thick, belt_width]);
 
+	%translate([53+1.6, 29, 14.5]) rotate([0, 90, -90])   import("belt-attach.stl");
 }
 
 module idler() {
@@ -138,7 +144,7 @@ module wheel_pillar(){
 module base() {
 	co= 50;
 	r= rounding/2;
-	translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
+	translate([0,0,-thickness]) linear_extrude(height= thickness) hull() {
 		for(p= wheelpos) {
 			translate(p) circle(r= r);
 		}
@@ -146,37 +152,38 @@ module base() {
 }
 
 module hotend_extender() {
-	h= 35;
+	h= 30;
+	dia= 16.5;
+	depth= 5.1;
 	difference() {
-		translate([0, 0, -5])  roundedBox([65, 20, h], 8, true);
-		#translate([0, 0, 8])  hole(16.2, 5);
+		translate([0, 0, 0])  rounded_base(65, 20, 8, h);
+		#translate([0, 0, h-depth])  cylinder(r=dia/2, depth+0.1, $fn= 64);
 	}
 }
 
 module Xcarriage(print=1) {
-	rotate([0,180,0]) {
-		if(print == 1) {
-			union() {
-				Xcarriage_main(1);
-				// bridging support layer
-				//translate([0,wheel_separation/2,-5]) rotate([0,0,90]) mountingplate(4, 1);
-			}
-		}else{
-			Xcarriage_main(0);
+	if(print == 1) {
+		union() {
+			Xcarriage_main(1);
+			// bridging support layer
+			//translate([0,wheel_separation/2,-5]) rotate([0,0,90]) mountingplate(4, 1);
 		}
+	}else{
+		Xcarriage_main(0);
 	}
+
 }
 
 module Xcarriage_main(print=1) {
-	belt_d= 5;
-	belt_y1= get_xgantry_width()/2+wheel_diameter/2+20 - bearingOD/2 + belt_d/2;
-	belt_y2= get_xgantry_width()/2+wheel_diameter/2-20 + bearingOD/2 - belt_d/2;
 	difference() {
 
 		union() {
 			base();
 			// extension for hotend
-			translate([0, wheel_separation/2, 15])  hotend_extender();
+			translate([0, wheel_separation/2, -1])  hotend_extender();
+			// channel support
+			#translate([wheel_distance/2+wheel_diameter/2-channel_depth/2, 0, -thickness]) cube([channel_depth, wheel_separation, channel_ht]);
+			translate([-(wheel_distance/2+wheel_diameter/2+channel_depth/2), 0, -thickness]) cube([channel_depth, wheel_separation, channel_ht]);
 		}
 
 		for(p=wheelpos) {
@@ -197,8 +204,8 @@ module Xcarriage_main(print=1) {
 
 		// grub screw at bottom for adjusting tightness of bottom wheels
 		for(p= [wheelpos[2], wheelpos[3]]) {
-			translate(p+ [0,rounding/2+2,-thickness/2+3/2]) rotate([90,0,0]) hole(3,rounding/2);
-			translate(p+ [0,14/2+1.0,-thickness/2+3/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
+			translate(p+ [0,rounding/2+2,-thickness/2]) rotate([90,0,0]) hole(3,rounding/2);
+			translate(p+ [0,14/2+1.0,-thickness/2]) rotate([90,30,0]) nutTrap(ffd=5.46,height=5);
 			translate(p+ [0,14/2,0]) cube([5.46,3,thickness], center=true);
 		}
 
@@ -206,14 +213,21 @@ module Xcarriage_main(print=1) {
 		#for (a = [-25,25]) translate([a, wheel_separation/2, -20]) rotate([0, 0, 0])  slot(4, 8, 70);
 
 		// hole for filament
-		#translate([0, wheel_separation/2, -100])  hole(4, 200);
+		#translate([0, wheel_separation/2, -100])  cylinder(r=3.8/2, h=200, $fn= 32);// hole for filament
+
+		// mount for endstop magnet
+		#translate([-wheel_distance/2-4, wheel_separation/2, -thickness-1])  hole(5, thickness+2);
 
 		// termination for belts
 		for(y= [belt_y1, belt_y2]) for(m= [0,1]){
 			mirror([m,0,0]) {
-				#translate([40,y,-20]) hole(5, 30);
+				#translate([30,y,-20]) hole(5, 30);
 			}
 		}
+
+		// mount for cable holder
+		#translate([0, 0, -5])  cylinder(r=0.25/2*mm, h=20, center=true);
+		#translate([0, wheel_separation, -5])  cylinder(r=0.25/2*mm, h=20, center=true);
 	}
 }
 

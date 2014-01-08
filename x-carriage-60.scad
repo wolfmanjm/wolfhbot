@@ -4,7 +4,7 @@
 use <misumi-parts-library.scad>
 use <dual-v-wheel.scad>
 use <myLibs.scad>
-use <XGantry-wide.scad>
+use <XGantry-60.scad>
 use <squirrel-fan.scad>
 use <../MCAD/boxes.scad>
 
@@ -15,18 +15,18 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //extruder_mount();
 
 // display it for print == 1
-Xcarriage(1);
+//Xcarriage(1);
 
 // render it for model
-//XcarriageModel();
+XcarriageModel();
 
-//extruder();
+//extruder_shelf();
 
 //Xcarriage_with_wheels();
 
 // the dimensions of the extrusion to run on
 extrusion= 20;
-extrusion_width= get_xgantry_width()+extrusion; // the side that the wheels run on
+extrusion_width= get_xgantry_width(); // the side that the wheels run on
 extrusion_height= 20;
 
 line_ht= 3.6; // height of line above extrusion
@@ -37,7 +37,6 @@ thickness = 10;
 mountingplate_w= 25.6+5;
 mountingplate_l= 70+2;
 mountingplate_h= 5;
-
 
 wheel_diameter = v_wheel_dia();
 wheel_width= v_wheel_width();
@@ -72,12 +71,12 @@ echo("wheel distance= ", wheel_distance);
 wheel_z= pillarht+wheel_width/2;
 function get_wheel_z()= wheel_z;
 
+idler1ht= -wheel_z+1.5 + 2;
+idler2ht= idler1ht+bearingThickness+bearingFlangeThickness*2+1;
+
 wheelpos= [ [-wheel_distance/2, 0, 0], [wheel_distance/2, 0, 0], [-wheel_distance/2, wheel_separation, 0], [wheel_distance/2, wheel_separation, 0]];
 
 function get_wheelpos(n) = [wheelpos[n][0], -wheel_diameter/2];
-
-idler1ht= -wheel_z+1.5 + 2;
-idler2ht= idler1ht+bearingThickness+bearingFlangeThickness*2+1;
 
 module XcarriageModel() {
 	Xcarriage(0);
@@ -88,22 +87,28 @@ module XcarriageModel() {
 	}
 
 	// show what we are riding on
-	translate([0, get_xgantry_width()/2+10+wheel_diameter/2,  -wheel_z-20]) {
+	translate([0, get_xgantry_width()/2+wheel_diameter/2, -wheel_z-20]) {
 		translate([0,0,-11.5]) Xgantry();
 		// bolt head
-		color("blue") translate([0,-get_xgantry_width()/2,22]) cylinder(r=10/2, h=2);
+		color("blue") translate([0,-get_xgantry_width()/2+10,22]) cylinder(r=10/2, h=2);
 	}
 
+	// extruder mount attachment
+	//translate([wheel_distance/2, -wheel_diameter, -thickness]) rotate([0, 0, 90])  hfs2020(wheel_distance);
+
+	// extruder mount
+	//translate([0, -55, -20])  extruder_shelf();
+
 	// show extruder and hotend
-	translate([0,wheel_separation/2,thickness/2]) rotate([0,0,0]) extruder();
+	translate([0,wheel_separation/2,0]) rotate([0,0,0]) extruder();
 
 	// Idler bearings
-	#translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-24, idler1ht]) idler();
-	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2+40, idler2ht]) idler();
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-20, idler1ht]) idler();
+	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2+20, idler2ht]) idler();
 
 	// belt
-	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2-24+bearingOD/2, idler1ht]) cube(size=[300, belt_thick, belt_width]);
-	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2+40-bearingOD/2- belt_thick, idler2ht]) cube(size=[300, belt_thick, belt_width]);
+	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2-20+bearingOD/2, idler1ht]) cube(size=[300, belt_thick, belt_width]);
+	color("white") translate([0, get_xgantry_width()/2+wheel_diameter/2+20-bearingOD/2- belt_thick, idler2ht]) cube(size=[300, belt_thick, belt_width]);
 
 }
 
@@ -139,17 +144,17 @@ module base() {
 	co= 50;
 	r= rounding/2;
 	translate([0,0,-thickness+0.05]) linear_extrude(height= thickness) hull() {
-		for(p= wheelpos) {
+		for(p= [wheelpos[0], wheelpos[1], wheelpos[2], wheelpos[3]]) {
 			translate(p) circle(r= r);
 		}
 	}
 }
 
 module hotend_extender() {
-	h= 35;
+	h= 50;
 	difference() {
-		translate([0, 0, -5])  roundedBox([65, 20, h], 8, true);
-		#translate([0, 0, 8])  hole(16.2, 5);
+		translate([0, 0, -5])  roundedBox([60, 20, h], 8, true);
+		#translate([0, 0, 17])  hole(16.2, 5);
 	}
 }
 
@@ -171,8 +176,8 @@ module Xcarriage_main(print=1) {
 	belt_d= 5;
 	belt_y1= get_xgantry_width()/2+wheel_diameter/2+20 - bearingOD/2 + belt_d/2;
 	belt_y2= get_xgantry_width()/2+wheel_diameter/2-20 + bearingOD/2 - belt_d/2;
-	difference() {
 
+	difference() {
 		union() {
 			base();
 			// extension for hotend
@@ -214,20 +219,59 @@ module Xcarriage_main(print=1) {
 				#translate([40,y,-20]) hole(5, 30);
 			}
 		}
+
+		// mount for cable holder
+		#translate([0, 0, -5])  cylinder(r=0.25/2*mm, h=20, center=true);
 	}
 }
 
-module mountingplate(clearance=0) {
-	x= mountingplate_w+clearance;
-	y= mountingplate_l+clearance;
-	translate([-x/2, -y/2,0]) cube([x, y, mountingplate_h]);
+module extruder_shelf() {
+	// base of extruder mount
+	w= 30;
+	l= 30;
+	co= 50;
+	thickness= 5;
+	r= rounding/2;
+	difference() {
+		translate([0, 0, -thickness])  linear_extrude(height= thickness) hull() {
+			for(p= [[w, l, 0], [-w, l, 0], [-w, -l, 0], [w, -l, 0]]) {
+				translate(p) circle(r= r);
+			}
+		}
+
+		// negative mount for extruder
+		translate([0,-10,-thickness/2]) rotate([0,0,90]) extruder_mount(w);
+
+		// mounting holes
+		#translate([w, l, -10]) rotate([0, 0, 0]) hole(5, 20);
+		#translate([-w, l, -10]) rotate([0, 0, 0]) hole(5, 20);
+
+		// fan mount hole
+		#translate([-w+2, 15, -10]) rotate([0, 0, 90])  slot(4, 20, 20);
+
+	}
+	// squirrel fan
+	%translate([0,30,-15]) rotate([0, 0, -115])  fan();
 }
 
 // extruder and head
 module extruder() {
-	h= 37;
-	#translate([0,0,-h])rotate([0,0,90]) mountingplate();
-	translate([22,-42,6]) rotate([0,0,0]) import("greg-wades-all.stl");
-	//translate([2,12,mountingplate_h+4.6]) rotate([90,0,0,0,0]) import("me_body_v5.2_3mm.stl");
-	translate([0,0,-h+9.5]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
+	//translate([0,0,0]) rotate([0,0,90]) mountingplate();
+	translate([22,-42,12]) rotate([0,0,0]) import("greg-wades-all.stl");
+	translate([0,0,-30]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
+}
+
+module extruder_mount(w) {
+	holes = 4;
+	l= 60;
+	height = thickness+2;
+
+	translate([0,0,1]) difference() {
+		translate([-5, 0, 0])  cube([w+5, l, height], center=true);
+		difference() {
+			cube([w, l, height], center=true);
+			cylinder(r=20, h=height+1, center=true, $fn=6);
+		    for (a = [-25,25]) translate([0, a, -height]) rotate([0, 0, 90])  slot(holes, 8, 2*height);
+		}
+	}
 }

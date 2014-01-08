@@ -18,10 +18,10 @@ module slot(d= 4, l= 8, ht= 1, clearance=0.1) {
 	d1= rd*2;
 	union() {
 		translate([0,0,ht/2]) cube([l-d1, d1, ht], center=true);
-		translate([-(l-d1)/2, 0, ht/2]) cylinder(h=ht, r=rd, $fn=fn, center=true); 
-		translate([(l-d1)/2, 0, ht/2]) cylinder(h=ht, r=rd, $fn=fn, center=true); 
+		translate([-(l-d1)/2, 0, ht/2]) cylinder(h=ht, r=rd, $fn=fn, center=true);
+		translate([(l-d1)/2, 0, ht/2]) cylinder(h=ht, r=rd, $fn=fn, center=true);
 	}
-	
+
 }
 
 /**
@@ -38,4 +38,17 @@ module triangle(o_len, a_len, depth)
     {
         polygon(points=[[0,0],[a_len,0],[0,o_len]], paths=[[0,1,2]]);
     }
+}
+
+module rounded_base(w, l, r, h) {
+	v1= [w/2-r, l/2-r, 0];
+	v2= [-w/2+r, -l/2+r, 0];
+	v3= [-w/2+r, l/2-r, 0];
+	v4= [w/2-r, -l/2+r, 0];
+	hull() {
+		translate(v1) cylinder(r= r, h=h);
+		translate(v2) cylinder(r= r, h=h);
+		translate(v3) cylinder(r= r, h=h);
+		translate(v4) cylinder(r= r, h=h);
+	}
 }
