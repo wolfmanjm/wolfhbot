@@ -31,6 +31,10 @@ Xgantry(0);
 //translate([0,0,carriage_ht]) rotate([0,0,0]) extruder();
 //translate([sep1+10,0,carriage_ht-10]) rotate([0,0,90]) mounting_plate();
 
+total_width= Xgantry_width+extrusion+6.4;
+translate([0, 0, 40-0.4])  cube(size=[10, total_width, 10], center=true);
+echo(str("Total width=", total_width));
+
 // extruder and head
 module extruder() {
 	translate([-2,-2.7,0]) rotate([180,0,0]) import("JHead_hotend_blank/jhead.stl");
@@ -53,7 +57,7 @@ module Xgantry(xpos= 0) {
 	translate([xgantry_length/2,-Xgantry_width/2,carriage_ht]) rotate([0,0,90]) hfs2020(xgantry_length);
 	translate([xgantry_length/2+extrusion/2,-sidelen/2,carriage_ht]) hfs2020(sidelen);
 	translate([-xgantry_length/2-extrusion/2,-sidelen/2,carriage_ht]) hfs2020(sidelen);
-	
+
 	//brackets
 	translate([xgantry_length/2,-Xgantry_width/2+10,carriage_ht+10]) rotate([0,90,90]) hblfsnf5();
 	translate([xgantry_length/2,Xgantry_width/2-10,carriage_ht-10]) rotate([0,-90,90]) hblfsnf5();
@@ -64,7 +68,7 @@ module Xgantry(xpos= 0) {
 		translate([0, -get_xgantry_width()/2-10.8, carriage_ht+10]) openrail();
 		translate([0, get_xgantry_width()/2+10.8, carriage_ht+10]) rotate([0,0,180]) openrail();
 	}
-  
+
 }
 
 

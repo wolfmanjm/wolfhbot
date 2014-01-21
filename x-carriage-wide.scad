@@ -6,6 +6,7 @@ use <dual-v-wheel.scad>
 use <myLibs.scad>
 use <XGantry-wide.scad>
 use <squirrel-fan.scad>
+use <belt-attach.scad>
 
 mm= 25.4;
 
@@ -14,7 +15,8 @@ columnfudge= 0.0; //fudge factor to get columns a bit bigger
 //extruder_mount();
 
 // display it for print == 1
-Xcarriage(1);
+//projection(cut=true)
+Xcarriage(0);
 
 // render it for model
 //XcarriageModel();
@@ -96,11 +98,11 @@ module XcarriageModel() {
 	translate([0, get_xgantry_width()/2+10+wheel_diameter/2,  -wheel_z-20]) {
 		translate([0,0,-11.5]) Xgantry();
 		// bolt head
-		color("blue") translate([0,-get_xgantry_width()/2,22]) cylinder(r=10/2, h=2);
+		color("blue") translate([60,-get_xgantry_width()/2,22]) cylinder(r=10/2, h=2);
 	}
 
 	// show extruder and hotend
-	//translate([0,wheel_separation/2,3]) rotate([0,0,0]) extruder();
+	%translate([0,wheel_separation/2,3]) rotate([0,0,0]) extruder();
 
 	// Idler bearings
 	translate([get_xgantry_length()/2-10, get_xgantry_width()/2+wheel_diameter/2-22, idler1ht]) idler();
@@ -110,7 +112,7 @@ module XcarriageModel() {
 	color("white") translate([0, belt_y1, idler1ht]) cube(size=[300, belt_thick, belt_width]);
 	color("white") translate([0, belt_y2, idler2ht]) cube(size=[300, belt_thick, belt_width]);
 
-	%translate([53+1.6, 29, 14.5]) rotate([0, 90, -90])   import("belt-attach.stl");
+	%translate([53+1.6, 29, 3.5]) rotate([0, -90, -90])  belt_clamp(); // import("belt-attach.stl");
 }
 
 module idler() {
@@ -210,7 +212,7 @@ module Xcarriage_main(print=1) {
 		}
 
 		// extruder mounting holes
-		#for (a = [-25,25]) translate([a, wheel_separation/2, -20]) rotate([0, 0, 0])  slot(4, 8, 70);
+		#for (a = [-25,25]) translate([a, wheel_separation/2, -20]) rotate([0, 0, 0])  slot(4, 10, 70);
 
 		// hole for filament
 		#translate([0, wheel_separation/2, -100])  cylinder(r=3.8/2, h=200, $fn= 32);// hole for filament
