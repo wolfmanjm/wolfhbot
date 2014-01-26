@@ -5,13 +5,13 @@ _NOTE_ This is still a work in progess, it is currently printing quite well.
 
 A large build volume 3d printer based on the CoreXY concept.
 
-The plans are use 2020 Misumi extrusions for most of the frame.
+It uses 2020 Misumi extrusions for most of the frame.
 
-* The XY carriages will run on either 2020 vslot or 2020 and openrail from openbuilds.com as W Wheels are no longer available
+* The XY carriages run on either 2020 vslot or 2020 and openrail from openbuilds.com as W Wheels are no longer available
 * The drive originally used 65lb Spectra fishing line and machined spools
 * Now uses GT2 belts, in Corexy configuration with no cross over
 * build volume is around 12 inches cubed (300x300x300 mm)
-* The Z lift has one Z actuator made of 2040 vslot
+* The Z platform has one Z actuator made of 2040 vslot
   and a printed carriage. It runs on an ACME 1/2" leadscrew with 10TPI and a printed PLA Nut
   and uses a moving knot to keep the cantilever level
 
@@ -37,6 +37,9 @@ For historical purposes...
 Recently re wired to be Corexy rather than HBot. This seems to reduce
 racking of the X Gantry. [See](http://joshuavasquez.com/docs/jVasquez/Projects/coreXY.html)
 
+I see no difference between using Spectra line drive and GT2 belts, in
+fact if anything it was slightly smoother using the line drive.
+
 Spectra Drive
 --------------
 For Spectra drive the four idlers on the XGantry are grooved 5mm bearings that bolt
@@ -58,6 +61,9 @@ The two end idlers are 2x flanged bearings back to back, and another pair separa
 Then two of the idlers on the X Gantry are raised to keep the belt riding level.
 I avoid the cross over of the belts by running the two belts one above the other in parallel.
 
+I improved this by using a printed GT2 idler and the two bearings
+separatedd with a washer as there was some roughness with the GT2
+teeth running over the smooth bearing
 
 Z Bed
 -----
