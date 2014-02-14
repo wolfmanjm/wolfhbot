@@ -62,8 +62,8 @@ Then two of the idlers on the X Gantry are raised to keep the belt riding level.
 I avoid the cross over of the belts by running the two belts one above the other in parallel.
 
 I improved this by using a printed GT2 idler and the two bearings
-separatedd with a washer as there was some roughness with the GT2
-teeth running over the smooth bearing
+separated with a washer as there was some roughness with the GT2
+teeth running over the smooth bearing.
 
 Z Bed
 -----
@@ -90,11 +90,11 @@ mini carriage which is bolted to the end of the 2040 beam. Halfway
 along this beam is a short piece of 2020 perpendicular to it, this
 provides the third attachment point for the bed.
 
-The most important part of this design is the 
+The most important part of this design is the
 [moving knot](http://cockrum.net/cnc_mechanical.html), which is attached to
 the top and bottom and runs over 4 v groove bearings on the cross
 beam, This keeps the beam level while allowing a single actuator on one
-end to move it up and down. This is the [far end](http://flic.kr/p/i67Sim), 
+end to move it up and down. This is the [far end](http://flic.kr/p/i67Sim),
 and here is a view of the [whole assembly](http://flic.kr/p/i67Es7).
 
 The bed is attached to the cross beam at three places to provide three
@@ -153,6 +153,20 @@ Z bed
 * 1x printed Z carriage, plus leadnut holder
 * 1x mini vslot carriage and mini wheels
 * 4x v groove bearings, 2x turnbuckles, two lengths of Spectra fishing line for the moving knot
+
+Construction
+------------
+
+Getting the top of the frame square is essential, measure each end of the Y
+rails to make sure they are parallel. Next the belts need to have exactly the
+same tension to keep the X gantry straight, this was introducing non-square
+prints for me. Loosen the X gantry on both Y carriages so it sits loosely on
+the Y carriages, then measure the distance of each end of the X Gantry to the
+front corner of the frame. Now tighten one or other belt until the X Gantry is
+square to the Y rails, then tighten it down to the Y carriages.
+
+If you find cylinders print out oblong or squares are not square this is
+probably the problem.
 
 License
 -------

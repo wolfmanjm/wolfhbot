@@ -173,6 +173,8 @@ module pulley( belt_type , pulley_OD , tooth_depth , tooth_width )
 		rotate_extrude($fn=teeth*4)
 		polygon([[0,0],[pulley_OD/2 + idler_ht,0],[pulley_OD/2 , idler_ht],[0 , idler_ht],[0,0]]);}
 
+		// uncomment for smooth pulley
+		//translate([0, 0, retainer_ht])  cylinder(r=pulley_OD/2+0.01, h=pulley_t_ht, $fn= 200);
 
 		}
 
