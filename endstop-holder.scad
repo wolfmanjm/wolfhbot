@@ -11,19 +11,17 @@ magnet_holder_X();
 
 
 module magnet_holder_X() {
-	l= 35+10;
+	l= 35+15;
 	w= 20;
 	t= 3;
-	lip= 10;
-	union() {
-	 	difference() {
-	 		translate([0, 0, 0])  cube(size=[w, l, t], center=true);
-	 		#translate([0,-10,-5]) rotate([0, 0, 90]) slot(d= 4, l= l/2, ht= 10);
+	cutout= 1/4*25.4;
+	difference() {
+		union() {
+	 		translate([-w/2, -l/2, 0])  cube(size=[w, l, t]);
+	 		translate([0, -l/2-10/2, t/2]) cube(size=[w, 10, cutout+5], center=true);
 	 	}
- 		difference() {
-	 		translate([0, l/2, lip/2])  cube(size=[w, 5, lip+t], center=true);
-	 		#translate([0, 10-0.1, lip/2+t/2])  rotate([0, 90, 90]) hole(mag_dia, 20);
-	 	}
+	 	#translate([0, l/2-3, 0.5])  rotate([0, 0, 0]) hole(mag_dia, 5);
+	 	translate([0, -l/2-6, t/2]) cube(size=[w+2, 9, cutout+0.1], center=true);
 	 }
 }
 
