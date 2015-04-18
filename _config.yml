@@ -7,10 +7,10 @@
 ## Uses distinct namespace. Jekyll settings should go at the root level.
 githubiverse:
     ## Metadata
-    title: "WolfHBot a large build volume HBOT style 3D Printer"
+    title: "WolfHBot a large build volume COREXY style 3D Printer"
     author: Jim Morris
     license: CC BY SA
-    tags: [3dprinter, hbot, reprap]
+    tags: [3dprinter, corexy, reprap]
 
     ## Github project parameters.
     github:
