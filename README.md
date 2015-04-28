@@ -1,4 +1,4 @@
-Wolf HBot
+WolfCoreXY
 ============
 
 A large build volume 3d printer based on the CoreXY concept.
