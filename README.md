@@ -1,19 +1,22 @@
-Wolf HBot
+Wolf CoreXY
 ============
 
 _NOTE_ This is still a work in progess, it is currently printing quite well.
+_UPDATE_ Changed the Y rails to Makerslide and Makeslide carriages and VWheels.
 
 A large build volume 3d printer based on the CoreXY concept.
 
 It uses 2020 Misumi extrusions for most of the frame.
 
-* The XY carriages run on either 2020 vslot or 2020 and openrail from openbuilds.com as W Wheels are no longer available
-* The drive originally used 65lb Spectra fishing line and machined spools
-* Now uses GT2 belts, in Corexy configuration with no cross over
+* The X carriage runs on 2020 and openrail from openbuilds.com
+* The Y carraiges run on Makerslide from Inventables.com
+* The drive can use either 65lb Spectra fishing line and machined spools, or GT2 pulleys and belts
+* the Belts have no corss over, they are stacked on top of eachother instead
 * build volume is around 12 inches cubed (300x300x300 mm)
 * The Z platform has one Z actuator made of 2040 vslot
   and a printed carriage. It runs on an ACME 1/2" leadscrew with 10TPI and a printed PLA Nut
   and uses a moving knot to keep the cantilever level
+* The X carriage is printable but is best milled from MDF
 
 Pictures and Videos
 -------------------
@@ -60,10 +63,6 @@ GT2 Belt Drive
 The two end idlers are 2x flanged bearings back to back, and another pair separated with a washer above it,
 Then two of the idlers on the X Gantry are raised to keep the belt riding level.
 I avoid the cross over of the belts by running the two belts one above the other in parallel.
-
-I improved this by using a printed GT2 idler and the two bearings
-separated with a washer as there was some roughness with the GT2
-teeth running over the smooth bearing.
 
 Z Bed
 -----
@@ -118,28 +117,41 @@ this could be a printed part).
 
 BOM
 ---
-All Aluminum parts are from Misumi with Misumi part numbers
+Aluminum parts are from Misumi with Misumi part numbers
 
-* 12x 500mm HFS2020 20mm extrusions - frame
-* 24x HBLFSN5 corner brackets - frame
+* 10x 500mm HFS2020 20mm extrusions - frame
+* 16x HBLFSN5 corner brackets - frame
 * 2x  550mm HFS2020 - X Gantry sides
-* 2x  85mm HFX2020 - X Gantry sides (Note it's cheaper to buy 2x 1000mm of 2020 and cut these yourself)
+* 2x  85mm HFS2020 - X Gantry sides (Note it's cheaper to buy 2x 1000mm of 2020 and cut these yourself)
+* 2x  540mm Makerslide - Y Rails
 * 4x  HBLFSNF5 brackets - X Gantry
 * 1x  500mm HFS2040 - Z Bed
 * 1x  250mm HFS2020 - Z Bed
+* 2x  Shapeoko motor mounts https://www.inventables.com/technologies/upgraded-shapeoko-motor-mount - Y carriages
+* 12x VWheels https://www.inventables.com/technologies/dual-bearing-v-wheel-kit or http://openbuildspartstore.com/delrin-v-wheel-kit/
+* lots of M5 nuts and bolts
+* lots of M3 nuts and bolts
+* 2x Nema 17 Stepper motors (preferably Kysan or equivalent)
+
+Spectra drive
+-------------
 * 2x  Delrin Spools for [Spectra](http://3d.grabercars.com/?product=filament-drive-reel-grooved-delrin-18mm-o-d-for-kossel) or any of the spools he sells at http://3d.grabercars.com/?post_type=product
 * 8x  625VV grooved bearings - for idlers from [ebay](http://www.ebay.com/itm/10-5-16-5mm-625VV-5mm-V-Groove-Guide-Pulley-Sealed-Rail-Ball-Bearing-5-16-5-/170998886188?pt=BI_Heavy_Equipment_Parts&hash=item27d053ef2c)
 * several yards of 65lb Spectra fishing line (Powerpro)
 * 2x ball swivels from a fishing store
-* 2x Nema 17 Stepper motors (preferably Kysan or equivalent)
-* lots of M5 nuts and bolts
-* lots of M3 nuts and bolts
+
+OR
+
+Belt Drive
+----------
+* 10 meters GT2 belt
+* 2 x GT2 pulleys 20 tooth
+* 12 x 5mm flanged bearings for the idlers 
 
 Printed Parts
 -------------
 * 1x motor-bracket-l.stl
 * 1x motor-bracket-r.stl
-* 2x y-carriage.stl
 * 1x x-carriage.stl
 
 Z bed
@@ -149,9 +161,9 @@ Z bed
 * Two printed Leadscrew nuts and a collar for the anti backlash
 * 5/8" diameter spring for the anti backlash
 * 2x 500mm 2040 VSlot
-* 4x VWheels
+* 4x solid V Wheels http://openbuildspartstore.com/solid-v-wheel-kit/
 * 1x printed Z carriage, plus leadnut holder
-* 1x mini vslot carriage and mini wheels
+* 1x mini vslot carriage and mini wheels http://openbuildspartstore.com/mini-v-wheel-plate/
 * 4x v groove bearings, 2x turnbuckles, two lengths of Spectra fishing line for the moving knot
 
 Construction
